@@ -44,12 +44,12 @@ struct SidebarMenu: View {
             
             // 设置
             Section(header: Text("设置")) {
-                NavigationLink(destination: SettingsView()) {
-                    Label("设置", systemImage: "gearshape")
+                NavigationLink(destination: GeneralSettingsView()) {
+                    Label("通用设置", systemImage: "gearshape")
                 }
                 
-                NavigationLink(destination: Text("调试页面")) {
-                    Label("调试", systemImage: "ladybug")
+                NavigationLink(destination: ShortcutSettingsView()) {
+                    Label("快捷键", systemImage: "keyboard")
                 }
             }
             .listStyle(SidebarListStyle())

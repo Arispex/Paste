@@ -22,7 +22,6 @@
 		9C54FFB82AD185BB00D5893E /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 9C54FFB72AD185BB00D5893E /* KeyboardShortcuts */; };
 		9C54FFBA2AD1860A00D5893E /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFB92AD1860A00D5893E /* GeneralSettingsView.swift */; };
 		9C54FFBC2AD1862600D5893E /* ShortcutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFBB2AD1862600D5893E /* ShortcutSettingsView.swift */; };
-		9C54FFBE2AD1865500D5893E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFBD2AD1865500D5893E /* SettingsView.swift */; };
 		9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */; };
 		9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */; };
 		9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */; };
@@ -64,7 +63,6 @@
 		9C54FFB42AD17FCE00D5893E /* SidebarMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarMenu.swift; sourceTree = "<group>"; };
 		9C54FFB92AD1860A00D5893E /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		9C54FFBB2AD1862600D5893E /* ShortcutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettingsView.swift; sourceTree = "<group>"; };
-		9C54FFBD2AD1865500D5893E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupView.swift; sourceTree = "<group>"; };
 		9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupWindowController.swift; sourceTree = "<group>"; };
 		9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemType.swift; sourceTree = "<group>"; };
@@ -174,7 +172,6 @@
 				9C54FFB42AD17FCE00D5893E /* SidebarMenu.swift */,
 				9C54FFB92AD1860A00D5893E /* GeneralSettingsView.swift */,
 				9C54FFBB2AD1862600D5893E /* ShortcutSettingsView.swift */,
-				9C54FFBD2AD1865500D5893E /* SettingsView.swift */,
 				9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */,
 			);
 			path = Views;
@@ -346,7 +343,6 @@
 				9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */,
 				9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */,
 				9C5365562AD2E9B80087502A /* ClipboardEntity+CoreDataProperties.swift in Sources */,
-				9C54FFBE2AD1865500D5893E /* SettingsView.swift in Sources */,
 				9C54FFBA2AD1860A00D5893E /* GeneralSettingsView.swift in Sources */,
 				9C54FFB52AD17FCE00D5893E /* SidebarMenu.swift in Sources */,
 				9C54FFBC2AD1862600D5893E /* ShortcutSettingsView.swift in Sources */,

@@ -10,11 +10,33 @@ import KeyboardShortcuts
 
 struct ShortcutSettingsView: View {
     var body: some View {
-        HStack {
-            Text("开关剪贴板")
-            Spacer()
-            KeyboardShortcuts.Recorder(for: .toggleClipboard)  // `toggleSidebar` 是我们将在下一步定义的快捷键名称
+        VStack(alignment: .leading, spacing: 20) {
+            // Section: 自定义快捷键
+            Text("自定义快捷键")
+                .foregroundColor(.gray)
+                .font(.headline)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text("开关剪贴板")
+                    Spacer()
+                    KeyboardShortcuts.Recorder(for: .toggleClipboard)
+                }
+            }
+            
+            // Section: 固定快捷键
+            Text("固定快捷键")
+                .foregroundColor(.gray)
+                .font(.headline)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text("在剪贴板中切换")
+                    Spacer()
+                    Image(systemName: "arrow.left").foregroundColor(.blue)
+                    Image(systemName: "arrow.right").foregroundColor(.blue)
+                        .padding(.leading, 5) // 添加一些间距使图标不会紧挨在一起
+                }
+            }
         }
-        .padding(20)
+        .padding(50)  // 添加一些周围的内边距，使内容不会贴近视图的边缘
     }
 }

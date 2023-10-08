@@ -11,20 +11,36 @@ import AppKit
 struct ClipboardItem: Identifiable, Equatable {
     var id = UUID()
     var appName: String
-    var timestamp: String
+    var timestamp: TimeInterval
     var content: String
-    var charCount: Int {
-        return content.count
-    }
     var appIconURL: URL
     var type: ClipboardItemType
     var sizeInBytes: Int {
-        return content.count
+        return Data(content.utf8).count
     }
+    var formattedTime: String {
+            let currentTime = Date().timeIntervalSince1970
+            let difference = currentTime - timestamp
+            let minute = 60.0
+            let hour = minute * 60
+            let day = hour * 24
+            
+            if difference < minute {
+                return "刚刚"
+            } else if difference < hour {
+                return "\(Int(difference/minute)) 分钟前"
+            } else if difference < day {
+                return "\(Int(difference/hour)) 小时前"
+            } else {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+                return formatter.string(from: Date(timeIntervalSince1970: timestamp))
+            }
+        }
     var displayString: String {
             switch type {
             case .text, .link, .richText:
-                return "\(charCount) 个字符"
+                return "\(sizeInBytes) 个字符"
             case .image, .file, .multipleFiles:
                 if sizeInBytes < 1_000_000 {
                     return "\(sizeInBytes/1_000) KB"
@@ -54,9 +70,10 @@ class ScrollViewManager: ObservableObject {
 struct ClipboardPopupView: View {
     let clipboardItems = [
         // 示例项，您需要确保URL指向正确的应用程序
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .text),
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696749514, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .text),
+        ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
+        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
     ]
 
     @State private var selectedItem: UUID?
@@ -72,7 +89,7 @@ struct ClipboardPopupView: View {
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                 Spacer()
-                                Text(item.timestamp)
+                                Text(item.formattedTime)
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                             }

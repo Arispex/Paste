@@ -14,12 +14,20 @@ struct ClipboardItem: Identifiable, Equatable {
     var timestamp: String
     var content: String
     var charCount: Int
-    var appIcon: Image
+    var appIconURL: URL
 
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
         return lhs.id == rhs.id
     }
 }
+
+extension URL {
+    func appIcon() -> Image {
+        let icon = NSWorkspace.shared.icon(forFile: self.path)
+        return Image(nsImage: icon)
+    }
+}
+
 
 class ScrollViewManager: ObservableObject {
     @Published var offset: CGFloat = 0
@@ -27,15 +35,14 @@ class ScrollViewManager: ObservableObject {
 
 struct ClipboardPopupView: View {
     let clipboardItems = [
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", charCount: 50, appIcon: Image(systemName: "safari.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
-        ClipboardItem(appName: "QQ", timestamp: "14:15", content: "Clipboard content from Notes.", charCount: 30, appIcon: Image(systemName: "note.text.fill")),
+        // 示例项，您需要确保URL指向正确的应用程序
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Safari.app")),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Arc.app")),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/QQ.app")),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Discord.app")),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Telegram.app")),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Termius.app")),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Sizzy.app")),
         // ... (您可以添加更多的项)
     ]
 
@@ -46,19 +53,18 @@ struct ClipboardPopupView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
                         ForEach(clipboardItems) { item in
-                            VStack {
+                            VStack(alignment: .leading) {
                                 HStack {
-                                    item.appIcon
+                                    item.appIconURL.appIcon()
                                         .resizable()
                                         .frame(width: 20, height: 20)
-                                        .foregroundColor(.blue)
+                                    Spacer()
                                     Text(item.timestamp)
                                         .font(.footnote)
                                         .foregroundColor(.gray)
                                 }
-                                Divider()
                                 Text(item.content)
-                                    .lineLimit(3)
+                                    .lineLimit(10)
                                     .truncationMode(.tail)
                                 Spacer()
                                 Text("\(item.charCount) characters")

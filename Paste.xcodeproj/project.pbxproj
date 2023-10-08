@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C53654D2AD2B5600087502A /* PasteboardHelper.swift */; };
 		9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FF812AD17D6D00D5893E /* PasteApp.swift */; };
 		9C54FF842AD17D6D00D5893E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FF832AD17D6D00D5893E /* ContentView.swift */; };
 		9C54FF862AD17D6E00D5893E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C54FF852AD17D6E00D5893E /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C53654D2AD2B5600087502A /* PasteboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasteboardHelper.swift; sourceTree = "<group>"; };
 		9C54FF7E2AD17D6D00D5893E /* Paste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paste.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C54FF812AD17D6D00D5893E /* PasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteApp.swift; sourceTree = "<group>"; };
 		9C54FF832AD17D6D00D5893E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -97,8 +99,6 @@
 		9C54FF752AD17D6C00D5893E = {
 			isa = PBXGroup;
 			children = (
-				9C70EEED2AD23EDC009DEE97 /* Enums */,
-				9C70EEEA2AD22688009DEE97 /* Helpers */,
 				9C54FF802AD17D6D00D5893E /* Paste */,
 				9C54FF972AD17D6E00D5893E /* PasteTests */,
 				9C54FFA12AD17D6E00D5893E /* PasteUITests */,
@@ -119,6 +119,8 @@
 		9C54FF802AD17D6D00D5893E /* Paste */ = {
 			isa = PBXGroup;
 			children = (
+				9C70EEED2AD23EDC009DEE97 /* Enums */,
+				9C70EEEA2AD22688009DEE97 /* Helpers */,
 				9C54FFC52AD1923900D5893E /* Controller */,
 				9C54FFB12AD17F9300D5893E /* Views */,
 				9C54FF812AD17D6D00D5893E /* PasteApp.swift */,
@@ -181,6 +183,7 @@
 		9C70EEEA2AD22688009DEE97 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				9C53654D2AD2B5600087502A /* PasteboardHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */,
 				9C54FF842AD17D6D00D5893E /* ContentView.swift in Sources */,
 				9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */,
+				9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */,
 				9C54FFBE2AD1865500D5893E /* SettingsView.swift in Sources */,
 				9C54FFBA2AD1860A00D5893E /* GeneralSettingsView.swift in Sources */,
 				9C54FFB52AD17FCE00D5893E /* SidebarMenu.swift in Sources */,

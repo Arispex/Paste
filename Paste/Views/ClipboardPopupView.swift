@@ -13,9 +13,26 @@ struct ClipboardItem: Identifiable, Equatable {
     var appName: String
     var timestamp: String
     var content: String
-    var charCount: Int
+    var charCount: Int {
+        return content.count
+    }
     var appIconURL: URL
     var type: ClipboardItemType
+    var sizeInBytes: Int {
+        return content.count
+    }
+    var displayString: String {
+            switch type {
+            case .text, .link, .richText:
+                return "\(charCount) 个字符"
+            case .image, .file, .multipleFiles:
+                if sizeInBytes < 1_000_000 {
+                    return "\(sizeInBytes/1_000) KB"
+                } else {
+                    return "\(sizeInBytes/1_000_000) MB"
+                }
+            }
+        }
 
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
         return lhs.id == rhs.id
@@ -37,9 +54,9 @@ class ScrollViewManager: ObservableObject {
 struct ClipboardPopupView: View {
     let clipboardItems = [
         // 示例项，您需要确保URL指向正确的应用程序
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .text),
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
-        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", charCount: 50, appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .text),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
+        ClipboardItem(appName: "Safari", timestamp: "15:30", content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
     ]
 
     @State private var selectedItem: UUID?
@@ -66,7 +83,7 @@ struct ClipboardPopupView: View {
                             HStack {
                                 Image(systemName: item.type.iconName) // 显示对应的图标
                                     .foregroundColor(.gray)
-                                Text("\(item.charCount) characters")
+                                Text(item.displayString)
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                             }

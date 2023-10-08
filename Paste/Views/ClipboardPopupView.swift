@@ -122,6 +122,12 @@ struct ClipboardPopupView: View {
                     case 124: // Right arrow
                         self.moveSelection(by: 1, with: proxy)
                         return nil // 不再返回事件
+                    case 36: // Return key
+                        if let itemToCopy = clipboardItems.first(where: { $0.id == selectedItem }) {
+                            PasteboardHelper.shared.copyToPasteboard(itemToCopy.content)
+                            NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                        }
+                        return nil
                     default:
                         break
                     }

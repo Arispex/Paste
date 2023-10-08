@@ -28,6 +28,8 @@ class ClipboardPopupWindowController: NSWindowController {
         window.contentView = hostingView
         
         self.init(window: window)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hideWindowAnimated), name: NSNotification.Name("HideClipboardPopup"), object: nil)
     }
 
     func showWindowAnimated() {

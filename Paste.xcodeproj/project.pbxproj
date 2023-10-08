@@ -24,7 +24,6 @@
 		9C54FFBE2AD1865500D5893E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFBD2AD1865500D5893E /* SettingsView.swift */; };
 		9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */; };
 		9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */; };
-		9C70EEEC2AD226A1009DEE97 /* ScrollViewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C70EEEB2AD226A1009DEE97 /* ScrollViewHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +64,6 @@
 		9C54FFBD2AD1865500D5893E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupView.swift; sourceTree = "<group>"; };
 		9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupWindowController.swift; sourceTree = "<group>"; };
-		9C70EEEB2AD226A1009DEE97 /* ScrollViewHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +178,6 @@
 		9C70EEEA2AD22688009DEE97 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				9C70EEEB2AD226A1009DEE97 /* ScrollViewHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -324,7 +321,6 @@
 				9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */,
 				9C54FF8B2AD17D6E00D5893E /* Persistence.swift in Sources */,
 				9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */,
-				9C70EEEC2AD226A1009DEE97 /* ScrollViewHelpers.swift in Sources */,
 				9C54FF842AD17D6D00D5893E /* ContentView.swift in Sources */,
 				9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */,
 				9C54FFBE2AD1865500D5893E /* SettingsView.swift in Sources */,

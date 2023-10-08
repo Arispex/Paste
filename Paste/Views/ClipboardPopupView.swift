@@ -86,6 +86,7 @@ struct ClipboardPopupView: View {
                     }
                     .padding()
                 }
+                .background(BlurView())
                 .onAppear {
                     selectedItem = clipboardItems.first?.id
                 }

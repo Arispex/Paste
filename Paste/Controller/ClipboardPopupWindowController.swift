@@ -14,23 +14,27 @@ class ClipboardPopupWindowController: NSWindowController {
         let screenHeight = NSScreen.main?.frame.height ?? 800
         let windowHeight: CGFloat = 400
         let windowY = 0 - windowHeight
-        
-        let window = NSWindow(
+
+        let panel = NSPanel(
             contentRect: NSRect(x: 0, y: windowY, width: NSScreen.main?.frame.width ?? 800, height: windowHeight),
             styleMask: [.borderless, .resizable, .nonactivatingPanel],
             backing: .buffered, defer: false)
-        window.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.statusWindow)))
-        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-        window.isReleasedWhenClosed = false
-        window.hasShadow = true
         
+        // 设置NSPanel的属性
+        panel.level = .mainMenu
+        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+
+        panel.isReleasedWhenClosed = false
+        panel.hasShadow = true
+
         let hostingView = NSHostingView(rootView: ClipboardPopupView())
-        window.contentView = hostingView
-        
-        self.init(window: window)
-        
+        panel.contentView = hostingView
+
+        self.init(window: panel)
+
         NotificationCenter.default.addObserver(self, selector: #selector(hideWindowAnimated), name: NSNotification.Name("HideClipboardPopup"), object: nil)
     }
+
 
     func showWindowAnimated() {
         if !hasRegisteredObserver {

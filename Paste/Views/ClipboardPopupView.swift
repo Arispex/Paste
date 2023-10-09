@@ -49,11 +49,27 @@ struct ClipboardItem: Identifiable, Equatable {
                 }
             }
         }
+    
+    var displayContent: some View {
+        switch type {
+        case .text:
+            return AnyView(Text(content))
+        case .image:
+            return AnyView(ClipboardItemImageView(imagePath: content))
+        case .file, .multipleFiles:
+            return AnyView(ClipboardItemFileIconView(filePath: content))
+        default:
+            return AnyView(Text(content))
+        }
+    }
+
 
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
         return lhs.id == rhs.id
     }
 }
+
+
 
 extension URL {
     func appIcon() -> Image {
@@ -71,61 +87,36 @@ struct ClipboardPopupView: View {
     let clipboardItems = [
         // 示例项，您需要确保URL指向正确的应用程序
         ClipboardItem(appName: "Safari", timestamp: 1696749514, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .text),
-        ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
-        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
-        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "/Users/jinnanxiang/Downloads/IMG_20231008_115150_760.jpg", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
+        ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "/Users/jinnanxiang/Downloads/IMG_20231008_115150_760.jp", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
+        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
+        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.p", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
+        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
     ]
 
     @State private var selectedItem: UUID?
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    ForEach(clipboardItems) { item in
-                        VStack(alignment: .leading) {
-                            HStack {
-                                item.appIconURL.appIcon()
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Spacer()
-                                Text(item.formattedTime)
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
-                            }
-                            Text(item.content)
-                                .lineLimit(10)
-                                .truncationMode(.tail)
-                            Spacer()
-                            HStack {
-                                Image(systemName: item.type.iconName) // 显示对应的图标
-                                    .foregroundColor(.gray)
-                                Text(item.displayString)
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
-                            }
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 20) {
+                        ForEach(clipboardItems) { item in
+                            ClipboardItemView(item: item)
+                                .id(item.id)
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedItem = item.id
+                                        proxy.scrollTo(item.id, anchor: .center)
+                                    }
+                                }
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(selectedItem == item.id ? Color.blue : Color.clear, lineWidth: 2)
+                                )
                         }
-                        .padding()
-                        .frame(width: 250)
-                        .frame(height: 250)
-                        .background(Color.white.opacity(0.8))
-                        .cornerRadius(10)
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                        .id(item.id)
-                        .onTapGesture {
-                            withAnimation {
-                                selectedItem = item.id
-                                proxy.scrollTo(item.id, anchor: .center)
-                            }
-                        }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(selectedItem == item.id ? Color.blue : Color.clear, lineWidth: 2)
-                        )
                     }
+                    .padding()
                 }
-                .padding()
-            }
             .background(BlurView())
             .onAppear {
                 selectedItem = clipboardItems.first?.id

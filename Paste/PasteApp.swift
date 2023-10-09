@@ -14,6 +14,7 @@ extension KeyboardShortcuts.Name {
 
 @main
 struct PasteApp: App {
+    @NSApplicationDelegateAdaptor(ClipboardMonitor.self) var clipboardMonitor
     private let clipboardWindowController = ClipboardPopupWindowController()
 
     var body: some Scene {

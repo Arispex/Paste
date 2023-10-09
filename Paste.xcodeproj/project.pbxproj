@@ -25,6 +25,7 @@
 		9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */; };
 		9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */; };
 		9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */; };
+		9C9363E32AD3CB4000F78F88 /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupView.swift; sourceTree = "<group>"; };
 		9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupWindowController.swift; sourceTree = "<group>"; };
 		9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemType.swift; sourceTree = "<group>"; };
+		9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 				9C54FF8F2AD17D6E00D5893E /* Paste.entitlements */,
 				9C54FF8C2AD17D6E00D5893E /* Paste.xcdatamodeld */,
 				9C54FF872AD17D6E00D5893E /* Preview Content */,
+				9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */,
 			);
 			path = Paste;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				9C5365562AD2E9B80087502A /* ClipboardEntity+CoreDataProperties.swift in Sources */,
 				9C54FFBA2AD1860A00D5893E /* GeneralSettingsView.swift in Sources */,
 				9C54FFB52AD17FCE00D5893E /* SidebarMenu.swift in Sources */,
+				9C9363E32AD3CB4000F78F88 /* ClipboardMonitor.swift in Sources */,
 				9C54FFBC2AD1862600D5893E /* ShortcutSettingsView.swift in Sources */,
 				9C5365552AD2E9B80087502A /* ClipboardEntity+CoreDataClass.swift in Sources */,
 				9C54FFB32AD17FBE00D5893E /* MainView.swift in Sources */,

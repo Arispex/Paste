@@ -92,9 +92,14 @@ struct ClipboardPopupView: View {
         ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
         ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.p", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
         ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
     ]
 
     @State private var selectedItem: UUID?
+    @State private var scrollOffset: CGFloat = 0
 
     var body: some View {
             ScrollViewReader { proxy in
@@ -140,6 +145,26 @@ struct ClipboardPopupView: View {
                         break
                     }
                     return event
+                }
+            }
+            .onAppear {
+                NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
+                    // 当垂直滚轮移动时，改变水平滚动偏移量
+                    self.scrollOffset += event.scrollingDeltaY
+                    
+                    // 根据您的需要调整此值以更改滚动速度
+                    let scrollSpeed: CGFloat = 5
+                    
+                    if abs(self.scrollOffset) > scrollSpeed {
+                        if self.scrollOffset > 0 {
+                            self.moveSelection(by: 1, with: proxy)
+                        } else {
+                            self.moveSelection(by: -1, with: proxy)
+                        }
+                        self.scrollOffset = 0
+                    }
+                    
+                    return nil // 阻止默认的事件处理
                 }
             }
         }

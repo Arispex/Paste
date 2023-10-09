@@ -103,10 +103,10 @@ class PasteboardHelper {
                 for type in item.types {
                     // Check for file URL
                     if type == .fileURL {
-                        if let filePath = item.string(forType: type) {
-                            filePaths.append(filePath)
-                        }
-                    }
+                                if let url = item.data(forType: type), let fileURL = NSURL(dataRepresentation: url, relativeTo: nil) as URL? {
+                                    filePaths.append(fileURL.path)
+                                }
+                            }
                     
                     // Check for rich text
                     if (type == .rtf || type == .rtfd) && filePaths.isEmpty {

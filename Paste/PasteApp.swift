@@ -7,6 +7,7 @@
 
 import SwiftUI
 import KeyboardShortcuts
+import CoreData
 
 extension KeyboardShortcuts.Name {
     static let toggleClipboard = Self("toggleClipboard")

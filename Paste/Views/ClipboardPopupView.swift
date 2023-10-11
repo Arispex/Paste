@@ -91,11 +91,7 @@ struct ClipboardPopupView: View {
         ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "/Users/jinnanxiang/Downloads/IMG_20231008_115150_760.jp", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
         ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
         ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.p", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
-        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
-        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
-        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
-        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
-        ClipboardItem(appName: "Safari", timestamp: 1696217614, content: "This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .link),
+        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py,/Users/jinnanxiang/Downloads/Default.code-profile", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .multipleFiles),
     ]
 
     @State private var selectedItem: UUID?
@@ -137,7 +133,7 @@ struct ClipboardPopupView: View {
                         return nil // 不再返回事件
                     case 36: // Return key
                         if let itemToCopy = clipboardItems.first(where: { $0.id == selectedItem }) {
-                            PasteboardHelper.shared.copyToPasteboard(itemToCopy.content)
+                            PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
                             NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         }
                         return nil

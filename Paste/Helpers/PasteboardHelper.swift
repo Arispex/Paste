@@ -13,9 +13,22 @@ class PasteboardHelper {
     
     private init() {}
     
-    func copyToPasteboard(_ string: String) {
-        pasteboard.declareTypes([.string], owner: nil)
-        pasteboard.setString(string, forType: .string)
+
+    func copyToPasteboard(_ string: String, type: ClipboardItemType) {
+        let pasteboard = NSPasteboard.general
+
+        switch type {
+        case .text, .richText, .link:
+            pasteboard.declareTypes([.string], owner: nil)
+            pasteboard.setString(string, forType: .string)
+
+        case .file, .multipleFiles, .image:
+            let filePaths = string.split(separator: ",").map { String($0) }
+            let fileUrls = filePaths.map { URL(fileURLWithPath: $0) }
+            
+            pasteboard.clearContents()
+            pasteboard.writeObjects(fileUrls as [NSPasteboardWriting])
+        }
     }
     
     func getCurrentText() -> String? {

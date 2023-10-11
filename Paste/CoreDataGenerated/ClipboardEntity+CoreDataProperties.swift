@@ -2,7 +2,7 @@
 //  ClipboardEntity+CoreDataProperties.swift
 //  Paste
 //
-//  Created by 金楠翔 on 2023/10/8.
+//  Created by 金楠翔 on 2023/10/11.
 //
 //
 
@@ -16,13 +16,13 @@ extension ClipboardEntity {
         return NSFetchRequest<ClipboardEntity>(entityName: "ClipboardEntity")
     }
 
-    @NSManaged public var id: UUID?
-    @NSManaged public var appName: String?
-    @NSManaged public var timestamp: Double
-    @NSManaged public var content: String?
     @NSManaged public var appIconURL: String?
-    @NSManaged public var type: String?
+    @NSManaged public var appName: String?
+    @NSManaged public var content: String?
+    @NSManaged public var id: UUID?
     @NSManaged public var sizeInBytes: Int64
+    @NSManaged public var timestamp: Double
+    @NSManaged public var type: String?
 
 }
 

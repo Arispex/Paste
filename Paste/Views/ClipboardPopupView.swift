@@ -38,17 +38,21 @@ struct ClipboardItem: Identifiable, Equatable {
             }
         }
     var displayString: String {
-            switch type {
-            case .text, .link, .richText:
-                return "\(sizeInBytes) 个字符"
-            case .image, .file, .multipleFiles:
-                if sizeInBytes < 1_000_000 {
-                    return "\(sizeInBytes/1_000) KB"
-                } else {
-                    return "\(sizeInBytes/1_000_000) MB"
-                }
+        switch type {
+        case .text, .link, .richText:
+            return "\(sizeInBytes) 个字符"
+        case .image, .file:
+            if sizeInBytes < 1_000_000 {
+                return "\(sizeInBytes/1_000) KB"
+            } else {
+                return "\(sizeInBytes/1_000_000) MB"
             }
+        case .multipleFiles:
+            let fileCount = content.components(separatedBy: ",").count
+            return "\(fileCount) 个文件"
         }
+    }
+
     
     var displayContent: some View {
         switch type {

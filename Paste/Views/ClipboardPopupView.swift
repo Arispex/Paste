@@ -56,8 +56,10 @@ struct ClipboardItem: Identifiable, Equatable {
             return AnyView(Text(content))
         case .image:
             return AnyView(ClipboardItemImageView(imagePath: content))
-        case .file, .multipleFiles:
+        case .file:
             return AnyView(ClipboardItemFileIconView(filePath: content))
+        case .multipleFiles:
+                return AnyView(ClipboardItemMultipleFilesIconView(filePath: content))
         default:
             return AnyView(Text(content))
         }
@@ -91,7 +93,7 @@ struct ClipboardPopupView: View {
         ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "/Users/jinnanxiang/Downloads/IMG_20231008_115150_760.jp", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
         ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
         ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.p", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
-        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py,/Users/jinnanxiang/Downloads/Default.code-profile", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .multipleFiles),
+        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py,/Users/jinnanxiang/Downloads/main.py,/Users/jinnanxiang/Downloads/深入设计模式 (亚历山大 · 什韦茨) (Z-Library).pdf", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .multipleFiles),
     ]
 
     @State private var selectedItem: UUID?

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9C1A236F2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A236D2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift */; };
 		9C1A23702AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A236E2AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift */; };
+		9C1A23722AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */; };
 		9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C53654D2AD2B5600087502A /* PasteboardHelper.swift */; };
 		9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FF812AD17D6D00D5893E /* PasteApp.swift */; };
 		9C54FF862AD17D6E00D5893E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C54FF852AD17D6E00D5893E /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		9C1A236D2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClipboardEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9C1A236E2AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClipboardEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemMultipleFilesIconView.swift; sourceTree = "<group>"; };
 		9C53654D2AD2B5600087502A /* PasteboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasteboardHelper.swift; sourceTree = "<group>"; };
 		9C54FF7E2AD17D6D00D5893E /* Paste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paste.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C54FF812AD17D6D00D5893E /* PasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteApp.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				9C9363FA2AD43C0400F78F88 /* ClipboardItemImageView.swift */,
 				9C9363F92AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift */,
 				9C9363FC2AD43C0400F78F88 /* ClipboardItemView.swift */,
+				9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */,
 				9C54FFB22AD17FBE00D5893E /* MainView.swift */,
 				9C54FFB42AD17FCE00D5893E /* SidebarMenu.swift */,
 				9C54FFB92AD1860A00D5893E /* GeneralSettingsView.swift */,
@@ -373,6 +376,7 @@
 				9C9364012AD43C0400F78F88 /* ClipboardItemView.swift in Sources */,
 				9C54FF8E2AD17D6E00D5893E /* Paste.xcdatamodeld in Sources */,
 				9C1A236F2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift in Sources */,
+				9C1A23722AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

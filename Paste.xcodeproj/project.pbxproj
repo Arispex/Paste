@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9C1A236F2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A236D2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift */; };
-		9C1A23702AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A236E2AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift */; };
 		9C1A23722AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */; };
+		9C1A23752AD7C47D00EDFEED /* ClipboardEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A23742AD7C47D00EDFEED /* ClipboardEntity.swift */; };
+		9C1A237C2AD7C77600EDFEED /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 9C1A237B2AD7C77600EDFEED /* SQLite */; };
+		9C1A237E2AD7C7E100EDFEED /* DatabaseSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A237D2AD7C7E100EDFEED /* DatabaseSchema.swift */; };
 		9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C53654D2AD2B5600087502A /* PasteboardHelper.swift */; };
 		9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FF812AD17D6D00D5893E /* PasteApp.swift */; };
 		9C54FF862AD17D6E00D5893E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C54FF852AD17D6E00D5893E /* Assets.xcassets */; };
@@ -52,9 +53,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9C1A236D2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClipboardEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		9C1A236E2AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClipboardEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemMultipleFilesIconView.swift; sourceTree = "<group>"; };
+		9C1A23742AD7C47D00EDFEED /* ClipboardEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardEntity.swift; sourceTree = "<group>"; };
+		9C1A237D2AD7C7E100EDFEED /* DatabaseSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseSchema.swift; sourceTree = "<group>"; };
 		9C53654D2AD2B5600087502A /* PasteboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasteboardHelper.swift; sourceTree = "<group>"; };
 		9C54FF7E2AD17D6D00D5893E /* Paste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paste.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C54FF812AD17D6D00D5893E /* PasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteApp.swift; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1A237C2AD7C77600EDFEED /* SQLite in Frameworks */,
 				9C54FFB82AD185BB00D5893E /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -108,13 +110,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9C5365522AD2E99B0087502A /* CoreDataGenerated */ = {
+		9C1A23732AD7C46400EDFEED /* SwiftDataGenerated */ = {
 			isa = PBXGroup;
 			children = (
-				9C1A236D2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift */,
-				9C1A236E2AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift */,
+				9C1A23742AD7C47D00EDFEED /* ClipboardEntity.swift */,
 			);
-			path = CoreDataGenerated;
+			path = SwiftDataGenerated;
 			sourceTree = "<group>";
 		};
 		9C54FF752AD17D6C00D5893E = {
@@ -140,7 +141,7 @@
 		9C54FF802AD17D6D00D5893E /* Paste */ = {
 			isa = PBXGroup;
 			children = (
-				9C5365522AD2E99B0087502A /* CoreDataGenerated */,
+				9C1A23732AD7C46400EDFEED /* SwiftDataGenerated */,
 				9C70EEED2AD23EDC009DEE97 /* Enums */,
 				9C70EEEA2AD22688009DEE97 /* Helpers */,
 				9C54FFC52AD1923900D5893E /* Controller */,
@@ -151,6 +152,7 @@
 				9C54FF8C2AD17D6E00D5893E /* Paste.xcdatamodeld */,
 				9C54FF872AD17D6E00D5893E /* Preview Content */,
 				9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */,
+				9C1A237D2AD7C7E100EDFEED /* DatabaseSchema.swift */,
 			);
 			path = Paste;
 			sourceTree = "<group>";
@@ -240,6 +242,7 @@
 			name = Paste;
 			packageProductDependencies = (
 				9C54FFB72AD185BB00D5893E /* KeyboardShortcuts */,
+				9C1A237B2AD7C77600EDFEED /* SQLite */,
 			);
 			productName = Paste;
 			productReference = 9C54FF7E2AD17D6D00D5893E /* Paste.app */;
@@ -315,6 +318,7 @@
 			mainGroup = 9C54FF752AD17D6C00D5893E;
 			packageReferences = (
 				9C54FFB62AD185BB00D5893E /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				9C1A237A2AD7C77600EDFEED /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 			);
 			productRefGroup = 9C54FF7F2AD17D6D00D5893E /* Products */;
 			projectDirPath = "";
@@ -365,17 +369,17 @@
 				9C9363FF2AD43C0400F78F88 /* ClipboardItemImageView.swift in Sources */,
 				9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */,
 				9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */,
-				9C1A23702AD6347F00EDFEED /* ClipboardEntity+CoreDataProperties.swift in Sources */,
 				9C9364002AD43C0400F78F88 /* ClipboardItemFileIconView.swift in Sources */,
+				9C1A23752AD7C47D00EDFEED /* ClipboardEntity.swift in Sources */,
 				9C9363FE2AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift in Sources */,
 				9C54FFBA2AD1860A00D5893E /* GeneralSettingsView.swift in Sources */,
 				9C54FFB52AD17FCE00D5893E /* SidebarMenu.swift in Sources */,
 				9C9363E32AD3CB4000F78F88 /* ClipboardMonitor.swift in Sources */,
 				9C54FFBC2AD1862600D5893E /* ShortcutSettingsView.swift in Sources */,
+				9C1A237E2AD7C7E100EDFEED /* DatabaseSchema.swift in Sources */,
 				9C54FFB32AD17FBE00D5893E /* MainView.swift in Sources */,
 				9C9364012AD43C0400F78F88 /* ClipboardItemView.swift in Sources */,
 				9C54FF8E2AD17D6E00D5893E /* Paste.xcdatamodeld in Sources */,
-				9C1A236F2AD6347F00EDFEED /* ClipboardEntity+CoreDataClass.swift in Sources */,
 				9C1A23722AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -699,6 +703,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9C1A237A2AD7C77600EDFEED /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.1;
+			};
+		};
 		9C54FFB62AD185BB00D5893E /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
@@ -710,6 +722,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9C1A237B2AD7C77600EDFEED /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C1A237A2AD7C77600EDFEED /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
 		9C54FFB72AD185BB00D5893E /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9C54FFB62AD185BB00D5893E /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;

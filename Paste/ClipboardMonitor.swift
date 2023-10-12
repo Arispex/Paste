@@ -6,7 +6,7 @@
 //
 
 import Cocoa
-import CoreData
+import SQLite
 import SwiftUI
 
 extension NSNotification.Name {
@@ -15,32 +15,56 @@ extension NSNotification.Name {
 
 class ClipboardMonitor: NSObject, NSApplicationDelegate {
     
-    var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Paste") // 使用您的数据模型名称替换 "YourModelName"
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
+    var db: Connection!
 
-    lazy var context: NSManagedObjectContext = {
-        return self.persistentContainer.viewContext
-    }()
+    let table = Table("clipboard_entities")
+    let id = Expression<UUID>("id")
+    let appIconURL = Expression<String?>("appIconURL")
+    let appName = Expression<String?>("appName")
+    let content = Expression<String?>("content")
+    let sizeInBytes = Expression<Int64?>("sizeInBytes")
+    let timestamp = Expression<Double?>("timestamp")
+    let type = Expression<String?>("type")
 
-    func saveContext() {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
+    override init() {
+            super.init()
+
+            // 确保 'paste' 文件夹存在
+            let documentsPath = NSSearchPathForDirectoriesInDomains(
+                .documentDirectory, .userDomainMask, true
+            ).first!
+            let pasteFolderPath = "\(documentsPath)/Paste"
+            
             do {
-                try context.save()
+                try FileManager.default.createDirectory(atPath: pasteFolderPath, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                print("Error creating 'paste' directory: \(error)")
+            }
+
+            // 初始化数据库连接
+            do {
+                db = try Connection("\(pasteFolderPath)/db.sqlite3")
+            } catch {
+                print("Failed to create or open database: \(error)")
+                return
+            }
+
+            // 创建表
+            do {
+                try db.run(table.create(ifNotExists: true) { t in
+                    t.column(id, primaryKey: true)
+                    t.column(appIconURL)
+                    t.column(appName)
+                    t.column(content)
+                    t.column(sizeInBytes)
+                    t.column(timestamp)
+                    t.column(type)
+                })
+            } catch {
+                print("Failed to create table: \(error)")
             }
         }
-    }
-    
+
     var timer: Timer!
     let pasteboard: NSPasteboard = .general
     var lastChangeCount: Int = 0
@@ -54,7 +78,6 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        saveContext()
         timer.invalidate()
     }
 
@@ -83,44 +106,57 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
         return totalSize > 0 ? totalSize : nil
     }
 
-
     @objc func handlePasteboardChange(_ notification: Notification) {
         @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
         
         if !clipboardMonitor {
             return
         }
-        let clipboardEntity = ClipboardEntity(context: self.context)
+        let newEntityId = UUID()
+        var newEntityAppIconURL: String?
+        var newEntityAppName: String?
+        var newEntityContent: String?
+        var newEntitySizeInBytes: Int64?
+        var newEntityTimestamp = Date().timeIntervalSince1970
+        var newEntityType: String?
+
         if let contentType = PasteboardHelper.shared.getCurrentType() {
-            clipboardEntity.id = UUID()
-            clipboardEntity.type = contentType.rawValue
-            clipboardEntity.timestamp = Date().timeIntervalSince1970
+            newEntityType = contentType.rawValue
 
             if let frontmostApp = NSWorkspace.shared.frontmostApplication {
                 let appName = frontmostApp.localizedName
                 let appURL = frontmostApp.bundleURL?.path
 
-                clipboardEntity.appName = appName
-                clipboardEntity.appIconURL = appURL
+                newEntityAppName = appName
+                newEntityAppIconURL = appURL
             }
 
             if let content = PasteboardHelper.shared.getCurrentContent() {
-                clipboardEntity.content = content
+                newEntityContent = content
 
                 if contentType == .image || contentType == .file || contentType == .multipleFiles {
                     let paths = content.split(separator: ",").map { String($0) }
                     let size = getSizeInBytes(of: paths) ?? 0
-                    clipboardEntity.sizeInBytes = size
+                    newEntitySizeInBytes = size
                 } else {
-                    clipboardEntity.sizeInBytes = Int64(content.count)
+                    newEntitySizeInBytes = Int64(content.count)
                 }
             }
             
             do {
-                try context.save()
+                let insert = table.insert(
+                    id <- newEntityId,
+                    appIconURL <- newEntityAppIconURL,
+                    appName <- newEntityAppName,
+                    content <- newEntityContent,
+                    sizeInBytes <- newEntitySizeInBytes,
+                    timestamp <- newEntityTimestamp,
+                    type <- newEntityType
+                )
+                try db.run(insert)
                 print("保存成功")
             } catch {
-                print("Failed to save item to Core Data: \(error)")
+                print("Failed to save item to database: \(error)")
             }
         }
     }

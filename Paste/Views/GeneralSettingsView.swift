@@ -35,28 +35,68 @@ struct SwitchToggleStyle: ToggleStyle {
 extension String {
     // 剪贴板监听
     static let clipboardMonitor = "ClipboardMonitorKey"
+    // 复制时声音提醒
+    static let soundReminderWhenCopying = "SoundReminderWhenCopyingKey"
+    // 提示音
+    static let sound = "SoundKey"
 }
 
 
 struct GeneralSettingsView: View {
     @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
+    @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
+    @AppStorage("SoundKey") var sound: String = "Tink"
+    
+    let sounds = ["Tink", "Frog", "Bottle", "Purr"]
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 10) {
             // Section: 通用设置
             Text("通用设置")
                 .foregroundColor(.gray)
                 .font(.headline)
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Spacer()
-                    Toggle("启用", isOn: $clipboardMonitor)
-                                    .toggleStyle(SwitchToggleStyle())
-                    Text(clipboardMonitor ? "正在监听剪贴板中的新内容" : "暂未监听剪贴板中的内容")
-                        .foregroundStyle(.gray)
-                        .padding()
+                .padding(.bottom, 10)
+            
+            HStack {
+                Spacer().frame(width: 20)
+                Toggle(isOn: $clipboardMonitor) {
+                    Text("启用")
                 }
+                .toggleStyle(SwitchToggleStyle())
             }
+            
+            
+            Divider()
+            
+            // Section: 复制&粘贴
+            Text("复制&粘贴")
+                .foregroundColor(.gray)
+                .font(.headline)
+                .padding(.bottom, 10)
+            
+            HStack {
+                Spacer().frame(width: 20)
+                Toggle("复制时声音提醒", isOn: $soundReminderWhenCopying)
+                    .toggleStyle(SwitchToggleStyle())
+                    .padding(.bottom, 20)
+            }
+            
+            HStack {
+                Spacer().frame(width: 20)
+                Text("提示音")
+                    .frame(alignment: .leading)
+                Spacer()
+                Picker("", selection: $sound) {
+                    ForEach(sounds, id: \.self) { sound in
+                        Text(sound).tag(sound)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .frame(width: 150)  // 调整宽度以适应你的需求
+            }
+            
         }
-        .padding(50)  // 添加一些周围的内边距，使内容不会贴近视图的边缘
+        .padding(EdgeInsets(top: 20, leading: 50, bottom: 20, trailing: 50))  // 优化了内边距
     }
 }
+

@@ -99,7 +99,7 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
             print("Failed to fetch items from database: \(error)")
         }
     }
-
+    
     
     func getSizeInBytes(of filePaths: [String]) -> Int64? {
         var totalSize: Int64 = 0
@@ -117,13 +117,15 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
         return totalSize > 0 ? totalSize : nil
     }
     
+    
     @objc func handlePasteboardChange(_ notification: Notification) {
         @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
-
+        @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
+        
         if !clipboardMonitor {
             return
         }
-
+        
         let newEntityId = UUID()
         var newEntityAppIconURL: String?
         var newEntityAppName: String?
@@ -131,21 +133,21 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
         var newEntitySizeInBytes: Int64?
         var newEntityTimestamp = Date().timeIntervalSince1970
         var newEntityType: String?
-
+        
         if let contentType = PasteboardHelper.shared.getCurrentType() {
             newEntityType = contentType.rawValue
-
+            
             if let frontmostApp = NSWorkspace.shared.frontmostApplication {
                 let appName = frontmostApp.localizedName
                 let appURL = frontmostApp.bundleURL?.path
-
+                
                 newEntityAppName = appName
                 newEntityAppIconURL = appURL
             }
-
+            
             if let content = PasteboardHelper.shared.getCurrentContent() {
                 newEntityContent = content
-
+                
                 if contentType == .image || contentType == .file || contentType == .multipleFiles {
                     let paths = content.split(separator: ",").map { String($0) }
                     let size = getSizeInBytes(of: paths) ?? 0
@@ -154,7 +156,7 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                     newEntitySizeInBytes = Int64(content.count)
                 }
             }
-
+            
             // Check if item with the same content already exists
             let existingItemQuery = table.filter(content == newEntityContent!)
             if let existingItem = try? db.pluck(existingItemQuery) {
@@ -176,8 +178,16 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                 try? db.run(insert)
                 print("保存成功")
             }
-
+            if soundReminderWhenCopying {
+                playSound()
+            }
             loadItemsFromDatabase()
+        }
+    }
+    func playSound() {
+        @AppStorage("SoundKey") var sound: String = "Tink"
+        if let sound = NSSound(named: NSSound.Name(sound)) { // "Tink"是macOS内置的一个声音效果
+            sound.play()
         }
     }
 }

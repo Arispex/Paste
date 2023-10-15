@@ -6,6 +6,13 @@
 import AppKit
 import SwiftUI
 
+class ClipboardPanel: NSPanel {
+    override var canBecomeKey: Bool {
+        return true
+    }
+}
+
+
 class ClipboardPopupWindowController: NSWindowController {
     private var hasRegisteredObserver = false
 
@@ -15,7 +22,7 @@ class ClipboardPopupWindowController: NSWindowController {
         let windowHeight: CGFloat = 400
         let windowY = 0 - windowHeight
 
-        let panel = NSPanel(
+        let panel = ClipboardPanel(
             contentRect: NSRect(x: 0, y: windowY, width: NSScreen.main?.frame.width ?? 800, height: windowHeight),
             styleMask: [.borderless, .resizable, .nonactivatingPanel],
             backing: .buffered, defer: false)
@@ -53,7 +60,6 @@ class ClipboardPopupWindowController: NSWindowController {
         window.setFrame(startFrame, display: true)
         window.makeKeyAndOrderFront(nil)
         
-        NSApp.activate(ignoringOtherApps: true)
         
         // 使用动画更改窗口位置
         NSAnimationContext.runAnimationGroup({ context in

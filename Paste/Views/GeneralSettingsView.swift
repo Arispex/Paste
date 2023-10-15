@@ -39,6 +39,8 @@ extension String {
     static let soundReminderWhenCopying = "SoundReminderWhenCopyingKey"
     // 提示音
     static let sound = "SoundKey"
+    // 剪贴板中回车
+    static let enterInClipboard = "EnterInClipboardKey"
 }
 
 
@@ -46,6 +48,7 @@ struct GeneralSettingsView: View {
     @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
     @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
     @AppStorage("SoundKey") var sound: String = "Tink"
+    @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
     
     let sounds = ["Tink", "Frog", "Bottle", "Purr"]
     
@@ -58,15 +61,14 @@ struct GeneralSettingsView: View {
                 .padding(.bottom, 10)
             
             HStack {
-                Spacer().frame(width: 20)
                 Toggle(isOn: $clipboardMonitor) {
                     Text("启用")
                 }
                 .toggleStyle(SwitchToggleStyle())
             }
             
-            
             Divider()
+                .padding(.bottom, 20)
             
             // Section: 复制&粘贴
             Text("复制&粘贴")
@@ -74,15 +76,11 @@ struct GeneralSettingsView: View {
                 .font(.headline)
                 .padding(.bottom, 10)
             
-            HStack {
-                Spacer().frame(width: 20)
-                Toggle("复制时声音提醒", isOn: $soundReminderWhenCopying)
-                    .toggleStyle(SwitchToggleStyle())
-                    .padding(.bottom, 20)
-            }
+            Toggle("复制时声音提醒", isOn: $soundReminderWhenCopying)
+                .toggleStyle(SwitchToggleStyle())
+                .padding(.bottom, 20)
             
             HStack {
-                Spacer().frame(width: 20)
                 Text("提示音")
                     .frame(alignment: .leading)
                 Spacer()
@@ -95,6 +93,26 @@ struct GeneralSettingsView: View {
                 .frame(width: 150)  // 调整宽度以适应你的需求
             }
             
+            Divider()
+                .padding(.bottom, 20)
+            
+            // Section: 复制&粘贴
+            Text("剪贴板")
+                .foregroundColor(.gray)
+                .font(.headline)
+                .padding(.bottom, 10)
+            
+            HStack {
+                Text("回车(Not working)")
+                    .frame(alignment: .leading)
+                Spacer()
+                Picker("", selection: $enterInClipboard) {
+                    Text("复制").tag("copy")
+                    Text("粘贴").tag("paste")
+                }
+                .pickerStyle(MenuPickerStyle())
+                .frame(width: 150)  // 调整宽度以适应你的需求
+            }
         }
         .padding(EdgeInsets(top: 20, leading: 50, bottom: 20, trailing: 50))  // 优化了内边距
     }

@@ -118,6 +118,8 @@ struct ClipboardPopupView: View {
             .background(BlurView())
             .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
                 NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                    @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
+                    
                     switch event.keyCode {
                     case 123: // Left arrow
                         self.moveSelection(by: -1, with: proxy)
@@ -128,6 +130,9 @@ struct ClipboardPopupView: View {
                     case 36: // Return key
                         if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
                             PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
+                            if enterInClipboard == "paste" {
+                                PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                            }
                             NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         }
                         return nil

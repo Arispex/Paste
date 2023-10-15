@@ -40,6 +40,7 @@ class ClipboardPopupWindowController: NSWindowController {
         self.init(window: panel)
 
         NotificationCenter.default.addObserver(self, selector: #selector(hideWindowAnimated), name: NSNotification.Name("HideClipboardPopup"), object: nil)
+        
     }
 
 

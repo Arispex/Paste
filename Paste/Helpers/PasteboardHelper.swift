@@ -32,29 +32,38 @@ class PasteboardHelper {
     }
     
     func pasteToCurrentFocusedElement() {
-        // 创建一个模拟 Command 键按下的事件
-        let cmdKeyDown = CGEvent(keyboardEventSource: nil, virtualKey: 0x37, keyDown: true)
-        cmdKeyDown?.flags = .maskCommand
+        // 创建并发送按键事件的方法
+        func sendPasteKeyPress() {
+            // 创建一个模拟 Command 键按下的事件
+            let cmdKeyDown = CGEvent(keyboardEventSource: nil, virtualKey: 0x37, keyDown: true)
+            cmdKeyDown?.flags = .maskCommand
 
-        // 创建一个模拟 'V' 键按下的事件
-        let vKeyDown = CGEvent(keyboardEventSource: nil, virtualKey: 0x09, keyDown: true)
-        vKeyDown?.flags = .maskCommand
+            // 创建一个模拟 'V' 键按下的事件
+            let vKeyDown = CGEvent(keyboardEventSource: nil, virtualKey: 0x09, keyDown: true)
+            vKeyDown?.flags = .maskCommand
 
-        // 创建一个模拟 'V' 键释放的事件
-        let vKeyUp = CGEvent(keyboardEventSource: nil, virtualKey: 0x09, keyDown: false)
-        vKeyUp?.flags = .maskCommand
+            // 创建一个模拟 'V' 键释放的事件
+            let vKeyUp = CGEvent(keyboardEventSource: nil, virtualKey: 0x09, keyDown: false)
+            vKeyUp?.flags = .maskCommand
 
-        // 创建一个模拟 Command 键释放的事件
-        let cmdKeyUp = CGEvent(keyboardEventSource: nil, virtualKey: 0x37, keyDown: false)
-        cmdKeyUp?.flags = .maskCommand
+            // 创建一个模拟 Command 键释放的事件
+            let cmdKeyUp = CGEvent(keyboardEventSource: nil, virtualKey: 0x37, keyDown: false)
+            cmdKeyUp?.flags = .maskCommand
 
-        // 发送事件到当前的聚焦点
-        let location = CGEventTapLocation.cghidEventTap
-        cmdKeyDown?.post(tap: location)
-        vKeyDown?.post(tap: location)
-        vKeyUp?.post(tap: location)
-        cmdKeyUp?.post(tap: location)
+            // 发送事件到当前的聚焦点
+            let location = CGEventTapLocation.cghidEventTap
+            cmdKeyDown?.post(tap: location)
+            vKeyDown?.post(tap: location)
+            vKeyUp?.post(tap: location)
+            cmdKeyUp?.post(tap: location)
+        }
+
+        // 添加0.1秒的延迟，然后发送按键事件
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            sendPasteKeyPress()
+        }
     }
+
 
     
     func getCurrentText() -> String? {

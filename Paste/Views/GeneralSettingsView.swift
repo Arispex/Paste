@@ -103,7 +103,7 @@ struct GeneralSettingsView: View {
                 .padding(.bottom, 10)
             
             HStack {
-                Text("回车(Not working)")
+                Text("回车")
                     .frame(alignment: .leading)
                 Spacer()
                 Picker("", selection: $enterInClipboard) {

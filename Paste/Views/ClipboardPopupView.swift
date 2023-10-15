@@ -90,16 +90,7 @@ class ScrollViewManager: ObservableObject {
 }
 
 struct ClipboardPopupView: View {
-    let clipboardItems = [
-        // 示例项，您需要确保URL指向正确的应用程序
-        ClipboardItem(appName: "Safari", timestamp: 1696749514, content: "This is a clipboard content from Safari.", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .text),
-        ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "/Users/jinnanxiang/Downloads/IMG_20231008_115150_760.jpg", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
-        ClipboardItem(appName: "Safari", timestamp: 1696750414, content: "/Users/jinnanxiang/Downloads/IMG_20231008_115150_760.jp", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .image),
-        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
-        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.p", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .file),
-        ClipboardItem(appName: "Safari", timestamp: 1696736014, content: "/Users/jinnanxiang/Downloads/demo.py,/Users/jinnanxiang/Downloads/main.py,/Users/jinnanxiang/Downloads/深入设计模式 (亚历山大 · 什韦茨) (Z-Library).pdf", appIconURL: URL(fileURLWithPath: "/Applications/Safari.app"), type: .multipleFiles),
-    ]
-
+    @ObservedObject var clipboardManager = ClipboardManager()
     @State private var selectedItem: UUID?
     @State private var scrollOffset: CGFloat = 0
 
@@ -107,7 +98,7 @@ struct ClipboardPopupView: View {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(clipboardItems) { item in
+                        ForEach(clipboardManager.items) { item in
                             ClipboardItemView(item: item)
                                 .id(item.id)
                                 .onTapGesture {
@@ -126,7 +117,7 @@ struct ClipboardPopupView: View {
                 }
             .background(BlurView())
             .onAppear {
-                selectedItem = clipboardItems.first?.id
+                selectedItem = clipboardManager.items.first?.id
             }
             .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
                 NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
@@ -138,7 +129,7 @@ struct ClipboardPopupView: View {
                         self.moveSelection(by: 1, with: proxy)
                         return nil // 不再返回事件
                     case 36: // Return key
-                        if let itemToCopy = clipboardItems.first(where: { $0.id == selectedItem }) {
+                        if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
                             PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
                             NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         }
@@ -173,11 +164,11 @@ struct ClipboardPopupView: View {
     }
 
     func moveSelection(by delta: Int, with proxy: ScrollViewProxy) {
-        guard let currentItem = clipboardItems.first(where: { $0.id == selectedItem }),
-              let currentIndex = clipboardItems.firstIndex(of: currentItem) else { return }
+        guard let currentItem = clipboardManager.items.first(where: { $0.id == selectedItem }),
+              let currentIndex = clipboardManager.items.firstIndex(of: currentItem) else { return }
 
-        let targetIndex = min(max(currentIndex + delta, 0), clipboardItems.count - 1)
-        selectedItem = clipboardItems[targetIndex].id
+        let targetIndex = min(max(currentIndex + delta, 0), clipboardManager.items.count - 1)
+        selectedItem = clipboardManager.items[targetIndex].id
         withAnimation {
             proxy.scrollTo(selectedItem!, anchor: .center)
         }

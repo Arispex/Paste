@@ -10,7 +10,6 @@
 		9C1A23722AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */; };
 		9C1A23752AD7C47D00EDFEED /* ClipboardEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A23742AD7C47D00EDFEED /* ClipboardEntity.swift */; };
 		9C1A237C2AD7C77600EDFEED /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 9C1A237B2AD7C77600EDFEED /* SQLite */; };
-		9C1A237E2AD7C7E100EDFEED /* DatabaseSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A237D2AD7C7E100EDFEED /* DatabaseSchema.swift */; };
 		9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C53654D2AD2B5600087502A /* PasteboardHelper.swift */; };
 		9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FF812AD17D6D00D5893E /* PasteApp.swift */; };
 		9C54FF862AD17D6E00D5893E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C54FF852AD17D6E00D5893E /* Assets.xcassets */; };
@@ -27,7 +26,7 @@
 		9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */; };
 		9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */; };
 		9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */; };
-		9C9363E32AD3CB4000F78F88 /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */; };
+		9C731A852ADBD8E900F09FB0 /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A842ADBD8E900F09FB0 /* ClipboardManager.swift */; };
 		9C9363FD2AD43C0400F78F88 /* ClipboardItemFileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363F82AD43C0300F78F88 /* ClipboardItemFileInfoView.swift */; };
 		9C9363FE2AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363F92AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift */; };
 		9C9363FF2AD43C0400F78F88 /* ClipboardItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363FA2AD43C0400F78F88 /* ClipboardItemImageView.swift */; };
@@ -55,7 +54,6 @@
 /* Begin PBXFileReference section */
 		9C1A23712AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemMultipleFilesIconView.swift; sourceTree = "<group>"; };
 		9C1A23742AD7C47D00EDFEED /* ClipboardEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardEntity.swift; sourceTree = "<group>"; };
-		9C1A237D2AD7C7E100EDFEED /* DatabaseSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseSchema.swift; sourceTree = "<group>"; };
 		9C53654D2AD2B5600087502A /* PasteboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasteboardHelper.swift; sourceTree = "<group>"; };
 		9C54FF7E2AD17D6D00D5893E /* Paste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paste.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C54FF812AD17D6D00D5893E /* PasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteApp.swift; sourceTree = "<group>"; };
@@ -75,7 +73,7 @@
 		9C54FFC32AD190AD00D5893E /* ClipboardPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupView.swift; sourceTree = "<group>"; };
 		9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupWindowController.swift; sourceTree = "<group>"; };
 		9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemType.swift; sourceTree = "<group>"; };
-		9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
+		9C731A842ADBD8E900F09FB0 /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
 		9C9363F82AD43C0300F78F88 /* ClipboardItemFileInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardItemFileInfoView.swift; sourceTree = "<group>"; };
 		9C9363F92AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardItemMissingFileInfoView.swift; sourceTree = "<group>"; };
 		9C9363FA2AD43C0400F78F88 /* ClipboardItemImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardItemImageView.swift; sourceTree = "<group>"; };
@@ -151,8 +149,7 @@
 				9C54FF8F2AD17D6E00D5893E /* Paste.entitlements */,
 				9C54FF8C2AD17D6E00D5893E /* Paste.xcdatamodeld */,
 				9C54FF872AD17D6E00D5893E /* Preview Content */,
-				9C9363E22AD3CB4000F78F88 /* ClipboardMonitor.swift */,
-				9C1A237D2AD7C7E100EDFEED /* DatabaseSchema.swift */,
+				9C731A842ADBD8E900F09FB0 /* ClipboardManager.swift */,
 			);
 			path = Paste;
 			sourceTree = "<group>";
@@ -366,6 +363,7 @@
 				9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */,
 				9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */,
 				9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */,
+				9C731A852ADBD8E900F09FB0 /* ClipboardManager.swift in Sources */,
 				9C9363FF2AD43C0400F78F88 /* ClipboardItemImageView.swift in Sources */,
 				9C54FF822AD17D6D00D5893E /* PasteApp.swift in Sources */,
 				9C53654E2AD2B5600087502A /* PasteboardHelper.swift in Sources */,
@@ -374,9 +372,7 @@
 				9C9363FE2AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift in Sources */,
 				9C54FFBA2AD1860A00D5893E /* GeneralSettingsView.swift in Sources */,
 				9C54FFB52AD17FCE00D5893E /* SidebarMenu.swift in Sources */,
-				9C9363E32AD3CB4000F78F88 /* ClipboardMonitor.swift in Sources */,
 				9C54FFBC2AD1862600D5893E /* ShortcutSettingsView.swift in Sources */,
-				9C1A237E2AD7C7E100EDFEED /* DatabaseSchema.swift in Sources */,
 				9C54FFB32AD17FBE00D5893E /* MainView.swift in Sources */,
 				9C9364012AD43C0400F78F88 /* ClipboardItemView.swift in Sources */,
 				9C54FF8E2AD17D6E00D5893E /* Paste.xcdatamodeld in Sources */,

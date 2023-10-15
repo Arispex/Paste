@@ -1,11 +1,12 @@
 //
-//  ClipboardMonitor.swift
+//  ClipboardManager.swift
 //  Paste
 //
-//  Created by 金楠翔 on 2023/10/9.
+//  Created by 金楠翔 on 2023/10/15.
 //
 
 import Cocoa
+import Combine
 import SQLite
 import SwiftUI
 
@@ -13,10 +14,14 @@ extension NSNotification.Name {
     public static let NSPasteboardDidChange: NSNotification.Name = .init(rawValue: "pasteboardDidChangeNotification")
 }
 
-class ClipboardMonitor: NSObject, NSApplicationDelegate {
+class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
+    @Published var items: [ClipboardItem] = []
     
-    var db: Connection!
-
+    private var db: Connection!
+    private var timer: Timer!
+    private var lastChangeCount: Int = 0
+    private let pasteboard: NSPasteboard = .general
+    
     let table = Table("clipboard_entities")
     let id = Expression<UUID>("id")
     let appIconURL = Expression<String?>("appIconURL")
@@ -25,62 +30,47 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
     let sizeInBytes = Expression<Int64?>("sizeInBytes")
     let timestamp = Expression<Double?>("timestamp")
     let type = Expression<String?>("type")
-
+    
     override init() {
-            super.init()
-
-            // 确保 'paste' 文件夹存在
-            let documentsPath = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
-            let pasteFolderPath = "\(documentsPath)/Paste"
-            
-            do {
-                try FileManager.default.createDirectory(atPath: pasteFolderPath, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print("Error creating 'paste' directory: \(error)")
-            }
-
-            // 初始化数据库连接
-            do {
-                db = try Connection("\(pasteFolderPath)/db.sqlite3")
-            } catch {
-                print("Failed to create or open database: \(error)")
-                return
-            }
-
-            // 创建表
-            do {
-                try db.run(table.create(ifNotExists: true) { t in
-                    t.column(id, primaryKey: true)
-                    t.column(appIconURL)
-                    t.column(appName)
-                    t.column(content)
-                    t.column(sizeInBytes)
-                    t.column(timestamp)
-                    t.column(type)
-                })
-            } catch {
-                print("Failed to create table: \(error)")
-            }
-        }
-
-    var timer: Timer!
-    let pasteboard: NSPasteboard = .general
-    var lastChangeCount: Int = 0
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // 1. 开始监听
+        super.init()
+        setupDatabase()
         startListening()
-
-        // 2. 注册通知观察者
         NotificationCenter.default.addObserver(self, selector: #selector(handlePasteboardChange), name: .NSPasteboardDidChange, object: nil)
+        loadItemsFromDatabase()
     }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        timer.invalidate()
+    
+    func setupDatabase() {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory, .userDomainMask, true
+        ).first!
+        let pasteFolderPath = "\(documentsPath)/Paste"
+        
+        let path = "\(pasteFolderPath)/db.sqlite3"
+        
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: pasteFolderPath) {
+            try? fileManager.createDirectory(atPath: pasteFolderPath, withIntermediateDirectories: true, attributes: nil)
+        }
+        do {
+            db = try Connection(path)
+            
+            // 创建表的逻辑
+            let createTable = table.create(ifNotExists: true) { t in
+                t.column(id, primaryKey: true)
+                t.column(appIconURL)
+                t.column(appName)
+                t.column(content)
+                t.column(sizeInBytes)
+                t.column(timestamp)
+                t.column(type)
+            }
+            
+            try db.run(createTable)
+        } catch {
+            print("Failed to create or connect to database: \(error)")
+        }
     }
-
+    
     func startListening() {
         timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (t) in
             if self.lastChangeCount != self.pasteboard.changeCount {
@@ -89,6 +79,27 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
             }
         }
     }
+    
+    func loadItemsFromDatabase() {
+        do {
+            self.items.removeAll()
+            let query = table.order(timestamp.desc)
+            for row in try db.prepare(query) {
+                let item = ClipboardItem(
+                    id: row[id],
+                    appName: row[appName] ?? "",
+                    timestamp: row[timestamp] ?? 0.0,
+                    content: row[content] ?? "",
+                    appIconURL: URL(string: row[appIconURL] ?? "")!,
+                    type: ClipboardItemType(rawValue: row[type] ?? "") ?? .text
+                )
+                self.items.append(item)
+            }
+        } catch {
+            print("Failed to fetch items from database: \(error)")
+        }
+    }
+
     
     func getSizeInBytes(of filePaths: [String]) -> Int64? {
         var totalSize: Int64 = 0
@@ -105,7 +116,7 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
         }
         return totalSize > 0 ? totalSize : nil
     }
-
+    
     @objc func handlePasteboardChange(_ notification: Notification) {
         @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
         
@@ -119,21 +130,21 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
         var newEntitySizeInBytes: Int64?
         var newEntityTimestamp = Date().timeIntervalSince1970
         var newEntityType: String?
-
+        
         if let contentType = PasteboardHelper.shared.getCurrentType() {
             newEntityType = contentType.rawValue
-
+            
             if let frontmostApp = NSWorkspace.shared.frontmostApplication {
                 let appName = frontmostApp.localizedName
                 let appURL = frontmostApp.bundleURL?.path
-
+                
                 newEntityAppName = appName
                 newEntityAppIconURL = appURL
             }
-
+            
             if let content = PasteboardHelper.shared.getCurrentContent() {
                 newEntityContent = content
-
+                
                 if contentType == .image || contentType == .file || contentType == .multipleFiles {
                     let paths = content.split(separator: ",").map { String($0) }
                     let size = getSizeInBytes(of: paths) ?? 0
@@ -158,6 +169,7 @@ class ClipboardMonitor: NSObject, NSApplicationDelegate {
             } catch {
                 print("Failed to save item to database: \(error)")
             }
+            loadItemsFromDatabase()
         }
     }
 }

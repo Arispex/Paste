@@ -42,6 +42,8 @@ class ClipboardPopupWindowController: NSWindowController {
             hasRegisteredObserver = true
         }
         guard let window = self.window else { return }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("ResetClipboardSelection"), object: nil)
 
         // 从下方开始
         let startFrame = NSRect(x: 0, y: -window.frame.height, width: window.frame.width, height: window.frame.height)

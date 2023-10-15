@@ -116,9 +116,6 @@ struct ClipboardPopupView: View {
                     .padding()
                 }
             .background(BlurView())
-            .onAppear {
-                selectedItem = clipboardManager.items.first?.id
-            }
             .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
                 NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                     switch event.keyCode {
@@ -139,6 +136,10 @@ struct ClipboardPopupView: View {
                     }
                     return event
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
+                selectedItem = clipboardManager.items.first?.id
+                proxy.scrollTo(clipboardManager.items.first?.id, anchor: .center)
             }
             .onAppear {
                 NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in

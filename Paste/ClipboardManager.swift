@@ -119,10 +119,11 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
     
     @objc func handlePasteboardChange(_ notification: Notification) {
         @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
-        
+
         if !clipboardMonitor {
             return
         }
+
         let newEntityId = UUID()
         var newEntityAppIconURL: String?
         var newEntityAppName: String?
@@ -130,21 +131,21 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
         var newEntitySizeInBytes: Int64?
         var newEntityTimestamp = Date().timeIntervalSince1970
         var newEntityType: String?
-        
+
         if let contentType = PasteboardHelper.shared.getCurrentType() {
             newEntityType = contentType.rawValue
-            
+
             if let frontmostApp = NSWorkspace.shared.frontmostApplication {
                 let appName = frontmostApp.localizedName
                 let appURL = frontmostApp.bundleURL?.path
-                
+
                 newEntityAppName = appName
                 newEntityAppIconURL = appURL
             }
-            
+
             if let content = PasteboardHelper.shared.getCurrentContent() {
                 newEntityContent = content
-                
+
                 if contentType == .image || contentType == .file || contentType == .multipleFiles {
                     let paths = content.split(separator: ",").map { String($0) }
                     let size = getSizeInBytes(of: paths) ?? 0
@@ -153,8 +154,16 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                     newEntitySizeInBytes = Int64(content.count)
                 }
             }
-            
-            do {
+
+            // Check if item with the same content already exists
+            let existingItemQuery = table.filter(content == newEntityContent!)
+            if let existingItem = try? db.pluck(existingItemQuery) {
+                // Update timestamp of the existing item
+                let updateTimestamp = existingItemQuery.update(timestamp <- newEntityTimestamp)
+                try? db.run(updateTimestamp)
+                print("Timestamp updated")
+            } else {
+                // Insert a new item
                 let insert = table.insert(
                     id <- newEntityId,
                     appIconURL <- newEntityAppIconURL,
@@ -164,11 +173,10 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                     timestamp <- newEntityTimestamp,
                     type <- newEntityType
                 )
-                try db.run(insert)
+                try? db.run(insert)
                 print("保存成功")
-            } catch {
-                print("Failed to save item to database: \(error)")
             }
+
             loadItemsFromDatabase()
         }
     }

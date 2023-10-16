@@ -39,7 +39,17 @@ struct ShortcutSettingsView: View {
                     Text("关闭剪贴板")
                     Spacer()
                     Text("ESC").foregroundColor(.blue)
-                        .padding(.leading, 5) // 添加一些间距使图标不会紧挨在一起
+                }
+                HStack {
+                    Text("复制到剪贴板")
+                    Spacer()
+                    Image(systemName: "command").foregroundColor(.blue)
+                    Text("C").foregroundColor(.blue)
+                }
+                HStack {
+                    Text("复制或粘贴剪贴内容")
+                    Spacer()
+                    Image(systemName: "return").foregroundColor(.blue)
                 }
             }
         }

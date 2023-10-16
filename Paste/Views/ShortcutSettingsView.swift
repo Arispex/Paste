@@ -47,7 +47,7 @@ struct ShortcutSettingsView: View {
                     Text("C").foregroundColor(.blue)
                 }
                 HStack {
-                    Text("复制或粘贴剪贴内容")
+                    Text("在剪贴板中复制或粘贴剪贴内容")
                     Spacer()
                     Image(systemName: "return").foregroundColor(.blue)
                 }

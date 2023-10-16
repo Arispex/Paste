@@ -35,6 +35,12 @@ struct ShortcutSettingsView: View {
                     Image(systemName: "arrow.right").foregroundColor(.blue)
                         .padding(.leading, 5) // 添加一些间距使图标不会紧挨在一起
                 }
+                HStack {
+                    Text("关闭剪贴板")
+                    Spacer()
+                    Text("ESC").foregroundColor(.blue)
+                        .padding(.leading, 5) // 添加一些间距使图标不会紧挨在一起
+                }
             }
         }
         .padding(50)  // 添加一些周围的内边距，使内容不会贴近视图的边缘

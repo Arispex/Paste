@@ -136,6 +136,9 @@ struct ClipboardPopupView: View {
                             NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         }
                         return nil
+                    case 53:
+                        NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                        return nil
                     default:
                         break
                     }

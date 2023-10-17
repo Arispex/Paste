@@ -27,7 +27,6 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
     let appIconURL = Expression<String?>("appIconURL")
     let appName = Expression<String?>("appName")
     let content = Expression<String?>("content")
-    let sizeInBytes = Expression<Int64?>("sizeInBytes")
     let timestamp = Expression<Double?>("timestamp")
     let type = Expression<String?>("type")
     
@@ -60,7 +59,6 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                 t.column(appIconURL)
                 t.column(appName)
                 t.column(content)
-                t.column(sizeInBytes)
                 t.column(timestamp)
                 t.column(type)
             }
@@ -101,23 +99,6 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
     }
     
     
-    func getSizeInBytes(of filePaths: [String]) -> Int64? {
-        var totalSize: Int64 = 0
-        for path in filePaths {
-            do {
-                let attributes = try FileManager.default.attributesOfItem(atPath: path)
-                if let size = attributes[.size] as? Int64 {
-                    totalSize += size
-                }
-            } catch {
-                print("Error retrieving file size: \(error)")
-                return nil
-            }
-        }
-        return totalSize > 0 ? totalSize : nil
-    }
-    
-    
     @objc func handlePasteboardChange(_ notification: Notification) {
         @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
         @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
@@ -130,7 +111,6 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
         var newEntityAppIconURL: String?
         var newEntityAppName: String?
         var newEntityContent: String?
-        var newEntitySizeInBytes: Int64?
         var newEntityTimestamp = Date().timeIntervalSince1970
         var newEntityType: String?
         
@@ -147,14 +127,6 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
             
             if let content = PasteboardHelper.shared.getCurrentContent() {
                 newEntityContent = content
-                
-                if contentType == .image || contentType == .file || contentType == .multipleFiles {
-                    let paths = content.split(separator: ",").map { String($0) }
-                    let size = getSizeInBytes(of: paths) ?? 0
-                    newEntitySizeInBytes = size
-                } else {
-                    newEntitySizeInBytes = Int64(content.count)
-                }
             }
             
             // Check if item with the same content already exists
@@ -171,7 +143,6 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                     appIconURL <- newEntityAppIconURL,
                     appName <- newEntityAppName,
                     content <- newEntityContent,
-                    sizeInBytes <- newEntitySizeInBytes,
                     timestamp <- newEntityTimestamp,
                     type <- newEntityType
                 )

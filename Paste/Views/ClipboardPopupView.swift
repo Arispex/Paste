@@ -16,8 +16,16 @@ struct ClipboardItem: Identifiable, Equatable {
     var appIconURL: URL
     var type: ClipboardItemType
     var sizeInBytes: Int {
-        return Data(content.utf8).count
-    }
+            switch type {
+            case .text, .link, .richText:
+                return Data(content.utf8).count
+            case .image, .file:
+                return fileSize(forPath: content) ?? 0
+            case .multipleFiles:
+                let paths = content.components(separatedBy: ",")
+                return paths.count
+            }
+        }
     var formattedTime: String {
             let currentTime = Date().timeIntervalSince1970
             let difference = currentTime - timestamp
@@ -73,6 +81,20 @@ struct ClipboardItem: Identifiable, Equatable {
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
         return lhs.id == rhs.id
     }
+    
+    private func fileSize(forPath path: String) -> Int? {
+        let fileURL = URL(fileURLWithPath: path)
+        do {
+            let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+            if let size = fileAttributes[.size] as? Int {
+                return size
+            }
+        } catch {
+            print("Error getting file size: \(error)")
+        }
+        return nil
+    }
+
 }
 
 

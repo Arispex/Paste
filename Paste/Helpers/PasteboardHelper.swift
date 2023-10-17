@@ -112,10 +112,13 @@ class PasteboardHelper {
                     // Check for file URL
                     if type == .fileURL {
                         if let filePath = item.string(forType: type) {
+                            if (items.count > 1) {
+                                return .multipleFiles
+                            }
                             if isImagePath(filePath) {
                                 return .image
                             }
-                            return items.count > 1 ? .multipleFiles : .file
+                            return .file
                         }
                     }
                     

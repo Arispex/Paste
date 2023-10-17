@@ -51,6 +51,11 @@ struct ShortcutSettingsView: View {
                     Spacer()
                     Image(systemName: "return").foregroundColor(.blue)
                 }
+                HStack {
+                    Text("在剪贴板中删除剪贴内容")
+                    Spacer()
+                    Image(systemName: "delete.left").foregroundColor(.blue)
+                }
             }
         }
         .padding(50)  // 添加一些周围的内边距，使内容不会贴近视图的边缘

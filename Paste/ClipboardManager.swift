@@ -190,4 +190,20 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
             sound.play()
         }
     }
+    func deleteItem(with uuid: UUID) {
+        let itemToDelete = table.filter(id == uuid)
+        do {
+            let deletedRowCount = try db.run(itemToDelete.delete())
+            if deletedRowCount > 0 {
+                print("删除成功")
+                // 在删除数据库项之后重新加载内容
+                loadItemsFromDatabase()
+            } else {
+                print("未找到指定的项进行删除")
+            }
+        } catch {
+            print("删除失败: \(error)")
+        }
+    }
+
 }

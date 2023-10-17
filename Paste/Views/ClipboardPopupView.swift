@@ -139,6 +139,20 @@ struct ClipboardPopupView: View {
                     case 53:
                         NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         return nil
+                    case 51: // Delete key
+                        if let indexToDelete = clipboardManager.items.firstIndex(where: { $0.id == selectedItem }) {
+                            clipboardManager.deleteItem(with: clipboardManager.items[indexToDelete].id)
+                                        
+                            if clipboardManager.items.isEmpty {
+                                selectedItem = nil
+                            } else if indexToDelete == 0 { // If the first item is deleted
+                                selectedItem = clipboardManager.items.first?.id
+                            } else {
+                                let newSelectionIndex = min(indexToDelete, clipboardManager.items.count - 1)
+                                selectedItem = clipboardManager.items[newSelectionIndex].id
+                            }
+                        }
+                        return nil
                     default:
                         break
                     }

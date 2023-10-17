@@ -97,11 +97,31 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
             print("Failed to fetch items from database: \(error)")
         }
     }
+
+    func cleanOldItemsIfNeeded() {
+        @AppStorage("MaxClipboardItemsKey") var maxClipboardItems: Int = 100
+        do {
+            // 获取当前数据库中的条目数
+            let rowCount = try db.scalar(table.count)
+            if rowCount > maxClipboardItems {
+                // 超过上限, 查找最早的项
+                let earliestItemQuery = table.order(timestamp.asc).limit(1)
+                if let earliestItem = try? db.pluck(earliestItemQuery) {
+                    // 删除这个最早的项
+                    try db.run(table.filter(id == earliestItem[id]).delete())
+                    print("Deleted oldest item to make space.")
+                }
+            }
+        } catch {
+            print("Failed to clean old items: \(error)")
+        }
+    }
     
     
     @objc func handlePasteboardChange(_ notification: Notification) {
         @AppStorage("ClipboardMonitorKey") var clipboardMonitor: Bool = false
         @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
+        @AppStorage("AutoCleanOldItemsKey") var autoCleanOldItems: Bool = false
         
         if !clipboardMonitor {
             return
@@ -148,6 +168,9 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
                 )
                 try? db.run(insert)
                 print("保存成功")
+                if autoCleanOldItems {
+                    cleanOldItemsIfNeeded()
+                }
             }
             if soundReminderWhenCopying {
                 playSound()

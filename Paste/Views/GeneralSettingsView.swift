@@ -41,6 +41,10 @@ extension String {
     static let sound = "SoundKey"
     // 剪贴板中回车
     static let enterInClipboard = "EnterInClipboardKey"
+    // 自动清理
+    static let autoCleanOldItems = "AutoCleanOldItemsKey"
+    // 保留数据数量
+    static let maxClipboardItems = "MaxClipboardItemsKey"
 }
 
 
@@ -49,72 +53,106 @@ struct GeneralSettingsView: View {
     @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
     @AppStorage("SoundKey") var sound: String = "Tink"
     @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
+    @AppStorage("AutoCleanOldItemsKey") var autoCleanOldItems: Bool = false
+    @AppStorage("MaxClipboardItemsKey") var maxClipboardItems: Int = 100
     
     let sounds = ["Tink", "Frog", "Bottle", "Purr"]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Section: 通用设置
-            Text("通用设置")
-                .foregroundColor(.gray)
-                .font(.headline)
-                .padding(.bottom, 10)
-            
-            HStack {
-                Toggle(isOn: $clipboardMonitor) {
-                    Text("启用")
-                }
-                .toggleStyle(SwitchToggleStyle())
-            }
-            
-            Divider()
-                .padding(.bottom, 20)
-            
-            // Section: 复制&粘贴
-            Text("复制&粘贴")
-                .foregroundColor(.gray)
-                .font(.headline)
-                .padding(.bottom, 10)
-            
-            Toggle("复制时声音提醒", isOn: $soundReminderWhenCopying)
-                .toggleStyle(SwitchToggleStyle())
-                .padding(.bottom, 20)
-            
-            HStack {
-                Text("提示音")
-                    .frame(alignment: .leading)
-                Spacer()
-                Picker("", selection: $sound) {
-                    ForEach(sounds, id: \.self) { sound in
-                        Text(sound).tag(sound)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                // Section: 通用设置
+                Text("通用设置")
+                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .padding(.bottom, 10)
+                
+                HStack {
+                    Toggle(isOn: $clipboardMonitor) {
+                        Text("启用")
                     }
+                    .toggleStyle(SwitchToggleStyle())
                 }
-                .pickerStyle(MenuPickerStyle())
-                .frame(width: 150)  // 调整宽度以适应你的需求
-            }
-            
-            Divider()
-                .padding(.bottom, 20)
-            
-            // Section: 复制&粘贴
-            Text("剪贴板")
-                .foregroundColor(.gray)
-                .font(.headline)
-                .padding(.bottom, 10)
-            
-            HStack {
-                Text("回车")
-                    .frame(alignment: .leading)
-                Spacer()
-                Picker("", selection: $enterInClipboard) {
-                    Text("复制").tag("copy")
-                    Text("粘贴").tag("paste")
+                
+                Divider()
+                    .padding(.bottom, 20)
+                
+                // Section: 复制&粘贴
+                Text("复制&粘贴")
+                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .padding(.bottom, 10)
+                
+                Toggle("复制时声音提醒", isOn: $soundReminderWhenCopying)
+                    .toggleStyle(SwitchToggleStyle())
+                    .padding(.bottom, 20)
+                
+                HStack {
+                    Text("提示音")
+                        .frame(alignment: .leading)
+                    Spacer()
+                    Picker("", selection: $sound) {
+                        ForEach(sounds, id: \.self) { sound in
+                            Text(sound).tag(sound)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: 150)  // 调整宽度以适应你的需求
                 }
-                .pickerStyle(MenuPickerStyle())
-                .frame(width: 150)  // 调整宽度以适应你的需求
+                
+                Divider()
+                    .padding(.bottom, 20)
+                
+                // Section: 剪贴板
+                Text("剪贴板")
+                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .padding(.bottom, 10)
+                
+                HStack {
+                    Text("回车")
+                        .frame(alignment: .leading)
+                    Spacer()
+                    Picker("", selection: $enterInClipboard) {
+                        Text("复制").tag("copy")
+                        Text("粘贴").tag("paste")
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: 150)  // 调整宽度以适应你的需求
+                }
+                
+                Divider()
+                    .padding(.bottom, 20)
+                
+                // Section: 自动清理
+                Text("自动清理")
+                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .padding(.bottom, 10)
+                
+                HStack {
+                    Toggle(isOn: $autoCleanOldItems) {
+                        Text("自动清理")
+                    }
+                    .toggleStyle(SwitchToggleStyle())
+                }
+                
+                HStack {
+                    Text("保留数量")
+                        .frame(alignment: .leading)
+                    Spacer()
+                    Picker("", selection: $maxClipboardItems) {
+                        Text("10 条").tag(10)
+                        Text("100 条").tag(100)
+                        Text("1000 条").tag(1000)
+                        Text("10000 条").tag(10000)
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: 150)  // 调整宽度以适应你的需求
+                }
             }
+            .padding(EdgeInsets(top: 20, leading: 50, bottom: 20, trailing: 50))  // 优化了内边距
         }
-        .padding(EdgeInsets(top: 20, leading: 50, bottom: 20, trailing: 50))  // 优化了内边距
     }
 }
 

@@ -150,14 +150,25 @@ struct ClipboardPopupView: View {
                         self.moveSelection(by: 1, with: proxy)
                         return nil // 不再返回事件
                     case 36: // Return key
-                        if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
-                            PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
-                            if enterInClipboard == "paste" {
-                                PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                        if event.modifierFlags.contains(.shift) {
+                            if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
+                                PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
+                                if enterInClipboard == "paste" {
+                                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                                }
+                                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                             }
-                            NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                            return nil
+                        } else {
+                            if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
+                                PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
+                                if enterInClipboard == "paste" {
+                                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                                }
+                                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                            }
+                            return nil
                         }
-                        return nil
                     case 53:
                         NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         return nil

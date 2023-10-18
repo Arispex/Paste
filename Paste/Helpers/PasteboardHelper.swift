@@ -31,6 +31,12 @@ class PasteboardHelper {
         }
     }
     
+    func copyPainTextToPasteboard(_ string: String) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(string, forType: .string)
+    }
+    
     func pasteToCurrentFocusedElement() {
         // 创建并发送按键事件的方法
         func sendPasteKeyPress() {

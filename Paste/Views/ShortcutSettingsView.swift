@@ -54,6 +54,12 @@ struct ShortcutSettingsView: View {
                     Image(systemName: "return").foregroundColor(.blue)
                 }
                 HStack {
+                    Text("在剪贴板中复制或粘贴纯文本剪贴内容")
+                    Spacer()
+                    Image(systemName: "shift").foregroundColor(.blue)
+                    Image(systemName: "return").foregroundColor(.blue)
+                }
+                HStack {
                     Text("在剪贴板中删除剪贴内容")
                     Spacer()
                     Image(systemName: "delete.left").foregroundColor(.blue)

@@ -27,6 +27,8 @@
 		9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */; };
 		9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */; };
 		9C731A852ADBD8E900F09FB0 /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A842ADBD8E900F09FB0 /* ClipboardManager.swift */; };
+		9C731A932ADF6A6400F09FB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A922ADF6A6300F09FB0 /* AppDelegate.swift */; };
+		9C731A952ADF6D7700F09FB0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A942ADF6D7700F09FB0 /* MainViewController.swift */; };
 		9C9363FD2AD43C0400F78F88 /* ClipboardItemFileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363F82AD43C0300F78F88 /* ClipboardItemFileInfoView.swift */; };
 		9C9363FE2AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363F92AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift */; };
 		9C9363FF2AD43C0400F78F88 /* ClipboardItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363FA2AD43C0400F78F88 /* ClipboardItemImageView.swift */; };
@@ -74,6 +76,8 @@
 		9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPopupWindowController.swift; sourceTree = "<group>"; };
 		9C70EEEE2AD23EE9009DEE97 /* ClipboardItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemType.swift; sourceTree = "<group>"; };
 		9C731A842ADBD8E900F09FB0 /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
+		9C731A922ADF6A6300F09FB0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9C731A942ADF6D7700F09FB0 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9C9363F82AD43C0300F78F88 /* ClipboardItemFileInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardItemFileInfoView.swift; sourceTree = "<group>"; };
 		9C9363F92AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardItemMissingFileInfoView.swift; sourceTree = "<group>"; };
 		9C9363FA2AD43C0400F78F88 /* ClipboardItemImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardItemImageView.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 		9C54FF802AD17D6D00D5893E /* Paste */ = {
 			isa = PBXGroup;
 			children = (
+				9C731A922ADF6A6300F09FB0 /* AppDelegate.swift */,
 				9C1A23732AD7C46400EDFEED /* SwiftDataGenerated */,
 				9C70EEED2AD23EDC009DEE97 /* Enums */,
 				9C70EEEA2AD22688009DEE97 /* Helpers */,
@@ -201,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				9C54FFC62AD1924700D5893E /* ClipboardPopupWindowController.swift */,
+				9C731A942ADF6D7700F09FB0 /* MainViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -361,6 +367,7 @@
 			files = (
 				9C9363FD2AD43C0400F78F88 /* ClipboardItemFileInfoView.swift in Sources */,
 				9C54FFC72AD1924700D5893E /* ClipboardPopupWindowController.swift in Sources */,
+				9C731A932ADF6A6400F09FB0 /* AppDelegate.swift in Sources */,
 				9C54FFC42AD190AD00D5893E /* ClipboardPopupView.swift in Sources */,
 				9C70EEEF2AD23EE9009DEE97 /* ClipboardItemType.swift in Sources */,
 				9C731A852ADBD8E900F09FB0 /* ClipboardManager.swift in Sources */,
@@ -377,6 +384,7 @@
 				9C9364012AD43C0400F78F88 /* ClipboardItemView.swift in Sources */,
 				9C54FF8E2AD17D6E00D5893E /* Paste.xcdatamodeld in Sources */,
 				9C1A23722AD7BF5E00EDFEED /* ClipboardItemMultipleFilesIconView.swift in Sources */,
+				9C731A952ADF6D7700F09FB0 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

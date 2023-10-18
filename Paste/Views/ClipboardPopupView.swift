@@ -143,10 +143,10 @@ struct ClipboardPopupView: View {
                     @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
                     
                     switch event.keyCode {
-                    case 123: // Left arrow
+                    case 123, 126: // Left and up arrow
                         self.moveSelection(by: -1, with: proxy)
                         return nil // 不再返回事件
-                    case 124: // Right arrow
+                    case 124, 125: // Right and down arrow
                         self.moveSelection(by: 1, with: proxy)
                         return nil // 不再返回事件
                     case 36: // Return key

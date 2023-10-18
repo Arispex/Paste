@@ -33,6 +33,8 @@ struct ShortcutSettingsView: View {
                     Spacer()
                     Image(systemName: "arrow.left").foregroundColor(.blue)
                     Image(systemName: "arrow.right").foregroundColor(.blue)
+                    Image(systemName: "arrow.up").foregroundColor(.blue)
+                    Image(systemName: "arrow.down").foregroundColor(.blue)
                         .padding(.leading, 5) // 添加一些间距使图标不会紧挨在一起
                 }
                 HStack {

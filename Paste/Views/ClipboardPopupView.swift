@@ -120,8 +120,8 @@ struct ClipboardPopupView: View {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(clipboardManager.items) { item in
-                            ClipboardItemView(item: item)
+                        ForEach(Array(zip(clipboardManager.items.indices, clipboardManager.items)), id: \.1.id) { index, item in
+                            ClipboardItemView(item: $clipboardManager.items[index])
                                 .id(item.id)
                                 .onTapGesture {
                                     withAnimation {

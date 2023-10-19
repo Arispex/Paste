@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ClipboardItemView: View {
-    let item: ClipboardItem
+    @Binding var item: ClipboardItem
 
     var body: some View {
         VStack(alignment: .leading) {

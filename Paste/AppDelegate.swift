@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if event.type == .leftMouseUp {
             // 左键点击逻辑
             let menu = NSMenu()
-            menu.addItem(NSMenuItem(title: "打开主窗口", action: #selector(openMainWindow), keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: "打开设置", action: #selector(openMainWindow), keyEquivalent: ""))
             menu.addItem(NSMenuItem(title: "退出", action: #selector(quitApp), keyEquivalent: ""))
             
             statusBarItem?.menu = menu

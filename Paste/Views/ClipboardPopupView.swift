@@ -115,13 +115,57 @@ struct ClipboardPopupView: View {
     @ObservedObject var clipboardManager = ClipboardManager()
     @State private var selectedItem: UUID?
     @State private var scrollOffset: CGFloat = 0
+    @State private var selectedCategory: ClipboardItemType? = nil
+    
+    var filteredItems: [ClipboardItem] {
+        if let category = selectedCategory {
+            let items = clipboardManager.items.filter { $0.type == category }
+            
+            // 打印选择的类别
+            print("选择的类型: \(category.rawValue)")
+            
+            // 打印该类别下的所有剪贴内容的内容和类型
+            for item in items {
+                print("内容: \(item.content), 类型: \(item.type.rawValue)")
+            }
+            
+            return items
+        }
+        return clipboardManager.items
+    }
+
 
     var body: some View {
+        // 类别选择器
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 20) {
+                Spacer() // 添加 Spacer 使内容居中
+                ForEach(ClipboardItemType.allCases, id: \.self) { category in
+                    Text(category.rawValue)
+                        .font(.system(size: 16, weight: .semibold))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(selectedCategory == category ? Color.blue.opacity(0.7) : Color.gray.opacity(0.2))
+                        .cornerRadius(16)
+                        .foregroundColor(selectedCategory == category ? Color.white : Color.black)
+                        .onTapGesture {
+                            withAnimation {
+                                selectedCategory = (selectedCategory == category) ? nil : category
+                            }
+                        }
+                }
+                Spacer() // 添加 Spacer 使内容居中
+            }
+            .padding()
+        }
+        .background(BlurView())
+        
+        
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(Array(zip(clipboardManager.items.indices, clipboardManager.items)), id: \.1.id) { index, item in
-                            ClipboardItemView(item: $clipboardManager.items[index])
+                        ForEach(Array(zip(filteredItems.indices, filteredItems)), id: \.1.id) { index, item in
+                            ClipboardItemView(item: Binding.constant(item))
                                 .id(item.id)
                                 .onTapGesture {
                                     withAnimation {
@@ -136,6 +180,7 @@ struct ClipboardPopupView: View {
                         }
                     }
                     .padding()
+                    .frame(minHeight: 300)
                 }
             .background(BlurView())
             .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
@@ -151,7 +196,7 @@ struct ClipboardPopupView: View {
                         return nil // 不再返回事件
                     case 36: // Return key
                         if event.modifierFlags.contains(.shift) {
-                            if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
+                            if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
                                 PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
                                 if enterInClipboard == "paste" {
                                     PasteboardHelper.shared.pasteToCurrentFocusedElement()
@@ -160,7 +205,7 @@ struct ClipboardPopupView: View {
                             }
                             return nil
                         } else {
-                            if let itemToCopy = clipboardManager.items.first(where: { $0.id == selectedItem }) {
+                            if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
                                 PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
                                 if enterInClipboard == "paste" {
                                     PasteboardHelper.shared.pasteToCurrentFocusedElement()
@@ -173,16 +218,16 @@ struct ClipboardPopupView: View {
                         NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
                         return nil
                     case 51: // Delete key
-                        if let indexToDelete = clipboardManager.items.firstIndex(where: { $0.id == selectedItem }) {
-                            clipboardManager.deleteItem(with: clipboardManager.items[indexToDelete].id)
+                        if let indexToDelete = filteredItems.firstIndex(where: { $0.id == selectedItem }) {
+                            clipboardManager.deleteItem(with: filteredItems[indexToDelete].id)
                                         
-                            if clipboardManager.items.isEmpty {
+                            if filteredItems.isEmpty {
                                 selectedItem = nil
                             } else if indexToDelete == 0 { // If the first item is deleted
-                                selectedItem = clipboardManager.items.first?.id
+                                selectedItem = filteredItems.first?.id
                             } else {
-                                let newSelectionIndex = min(indexToDelete, clipboardManager.items.count - 1)
-                                selectedItem = clipboardManager.items[newSelectionIndex].id
+                                let newSelectionIndex = min(indexToDelete, filteredItems.count - 1)
+                                selectedItem = filteredItems[newSelectionIndex].id
                             }
                         }
                         return nil
@@ -193,8 +238,8 @@ struct ClipboardPopupView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
-                selectedItem = clipboardManager.items.first?.id
-                proxy.scrollTo(clipboardManager.items.first?.id, anchor: .center)
+                selectedItem = filteredItems.first?.id
+                proxy.scrollTo(filteredItems.first?.id, anchor: .center)
             }
             .onAppear {
                 NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
@@ -220,11 +265,11 @@ struct ClipboardPopupView: View {
     }
 
     func moveSelection(by delta: Int, with proxy: ScrollViewProxy) {
-        guard let currentItem = clipboardManager.items.first(where: { $0.id == selectedItem }),
-              let currentIndex = clipboardManager.items.firstIndex(of: currentItem) else { return }
+        guard let currentItem = filteredItems.first(where: { $0.id == selectedItem }),
+              let currentIndex = filteredItems.firstIndex(of: currentItem) else { return }
 
-        let targetIndex = min(max(currentIndex + delta, 0), clipboardManager.items.count - 1)
-        selectedItem = clipboardManager.items[targetIndex].id
+        let targetIndex = min(max(currentIndex + delta, 0), filteredItems.count - 1)
+        selectedItem = filteredItems[targetIndex].id
         withAnimation {
             proxy.scrollTo(selectedItem!, anchor: .center)
         }

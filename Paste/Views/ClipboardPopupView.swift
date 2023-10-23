@@ -117,63 +117,52 @@ struct ClipboardPopupView: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var selectedCategory: ClipboardItemType? {
         didSet {
-                // 当选中一个新类别时，将选中的项设置为该类别的第一个条目
-                if let firstItem = filteredItems.first {
-                    selectedItem = firstItem.id
-                } else {
-                    selectedItem = nil
-                }
+            // 当选中一个新类别时，将选中的项设置为该类别的第一个条目
+            if let firstItem = filteredItems.first {
+                selectedItem = firstItem.id
+            } else {
+                selectedItem = nil
             }
+        }
     }
     
     var filteredItems: [ClipboardItem] {
         if let category = selectedCategory {
-            let items = clipboardManager.items.filter { $0.type == category }
-            
-            // 打印选择的类别
-            print("选择的类型: \(category.rawValue)")
-            
-            // 打印该类别下的所有剪贴内容的内容和类型
-            for item in items {
-                print("内容: \(item.content), 类型: \(item.type.rawValue)")
-            }
-            
-            return items
+            return clipboardManager.items.filter { $0.type == category }
         }
         return clipboardManager.items
     }
 
-
     var body: some View {
-        // 类别选择器
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                Spacer() // 添加 Spacer 使内容居中
-                ForEach(ClipboardItemType.allCases, id: \.self) { category in
-                    Text(category.rawValue)
-                        .font(.system(size: 16, weight: .semibold))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(selectedCategory == category ? Color.blue.opacity(0.7) : Color.gray.opacity(0.2))
-                        .cornerRadius(16)
-                        .foregroundColor(selectedCategory == category ? Color.white : Color.black)
-                        .onTapGesture {
-                            withAnimation {
-                                selectedCategory = (selectedCategory == category) ? nil : category
+        VStack(spacing: 0) {
+            // 类别选择器
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    Spacer()  // 添加 Spacer 使内容居中
+                    ForEach(ClipboardItemType.allCases, id: \.self) { category in
+                        Text(category.rawValue)
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(selectedCategory == category ? Color.blue.opacity(0.7) : Color.gray.opacity(0.2))
+                            .cornerRadius(16)
+                            .foregroundColor(selectedCategory == category ? Color.white : Color.black)
+                            .onTapGesture {
+                                withAnimation {
+                                    selectedCategory = (selectedCategory == category) ? nil : category
+                                }
                             }
-                        }
+                    }
+                    Spacer()  // 添加 Spacer 使内容居中
                 }
-                Spacer() // 添加 Spacer 使内容居中
+                .frame(minHeight: 80, alignment: .center)
             }
-            .padding()
-        }
-        .background(BlurView())
-        
-        
+            .background(BlurView())
+
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(Array(zip(filteredItems.indices, filteredItems)), id: \.1.id) { index, item in
+                        ForEach(filteredItems, id: \.id) { item in
                             ClipboardItemView(item: Binding.constant(item))
                                 .id(item.id)
                                 .onTapGesture {
@@ -191,88 +180,89 @@ struct ClipboardPopupView: View {
                     .padding()
                     .frame(minHeight: 300)
                 }
-            .background(BlurView())
-            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-                NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-                    @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
-                    
-                    switch event.keyCode {
-                    case 123, 126: // Left and up arrow
-                        self.moveSelection(by: -1, with: proxy)
-                        return nil // 不再返回事件
-                    case 124, 125: // Right and down arrow
-                        self.moveSelection(by: 1, with: proxy)
-                        return nil // 不再返回事件
-                    case 36: // Return key
-                        if event.modifierFlags.contains(.shift) {
-                            if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
-                                PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
-                                if enterInClipboard == "paste" {
-                                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
-                                }
-                                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                            }
-                            return nil
-                        } else {
-                            if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
-                                PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
-                                if enterInClipboard == "paste" {
-                                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
-                                }
-                                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                            }
-                            return nil
-                        }
-                    case 53:
-                        NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                        return nil
-                    case 51: // Delete key
-                        if let indexToDelete = filteredItems.firstIndex(where: { $0.id == selectedItem }) {
-                            clipboardManager.deleteItem(with: filteredItems[indexToDelete].id)
-                                        
-                            if filteredItems.isEmpty {
-                                selectedItem = nil
-                            } else if indexToDelete == 0 { // If the first item is deleted
-                                selectedItem = filteredItems.first?.id
-                            } else {
-                                let newSelectionIndex = min(indexToDelete, filteredItems.count - 1)
-                                selectedItem = filteredItems[newSelectionIndex].id
-                            }
-                        }
-                        return nil
-                    default:
-                        break
-                    }
-                    return event
-                }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
-                withAnimation(.none) {
-                    selectedItem = filteredItems.first?.id
-                    selectedCategory = nil
-                    if let firstID = filteredItems.first?.id {
-                        proxy.scrollTo(firstID, anchor: .center)
-                    }
-                }
-            }
-            .onAppear {
-                NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
-                    // 当垂直滚轮移动时，改变水平滚动偏移量
-                    self.scrollOffset += event.scrollingDeltaY
-                    
-                    // 根据您的需要调整此值以更改滚动速度
-                    let scrollSpeed: CGFloat = 5
-                    
-                    if abs(self.scrollOffset) > scrollSpeed {
-                        if self.scrollOffset > 0 {
-                            self.moveSelection(by: 1, with: proxy)
-                        } else {
+                .background(BlurView())
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                    NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                        @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
+                        
+                        switch event.keyCode {
+                        case 123, 126: // Left and up arrow
                             self.moveSelection(by: -1, with: proxy)
+                            return nil // 不再返回事件
+                        case 124, 125: // Right and down arrow
+                            self.moveSelection(by: 1, with: proxy)
+                            return nil // 不再返回事件
+                        case 36: // Return key
+                            if event.modifierFlags.contains(.shift) {
+                                if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                    PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
+                                    if enterInClipboard == "paste" {
+                                        PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                                    }
+                                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                                }
+                                return nil
+                            } else {
+                                if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                    PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
+                                    if enterInClipboard == "paste" {
+                                        PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                                    }
+                                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                                }
+                                return nil
+                            }
+                        case 53:
+                            NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                            return nil
+                        case 51: // Delete key
+                            if let indexToDelete = filteredItems.firstIndex(where: { $0.id == selectedItem }) {
+                                clipboardManager.deleteItem(with: filteredItems[indexToDelete].id)
+                                        
+                                if filteredItems.isEmpty {
+                                    selectedItem = nil
+                                } else if indexToDelete == 0 { // If the first item is deleted
+                                    selectedItem = filteredItems.first?.id
+                                } else {
+                                    let newSelectionIndex = min(indexToDelete, filteredItems.count - 1)
+                                    selectedItem = filteredItems[newSelectionIndex].id
+                                }
+                            }
+                            return nil
+                        default:
+                            break
                         }
-                        self.scrollOffset = 0
+                        return event
                     }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
+                    withAnimation(.none) {
+                        selectedItem = filteredItems.first?.id
+                        selectedCategory = nil
+                        if let firstID = filteredItems.first?.id {
+                            proxy.scrollTo(firstID, anchor: .center)
+                        }
+                    }
+                }
+                .onAppear {
+                    NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
+                        // 当垂直滚轮移动时，改变水平滚动偏移量
+                        self.scrollOffset += event.scrollingDeltaY
                     
-                    return nil // 阻止默认的事件处理
+                        // 根据您的需要调整此值以更改滚动速度
+                        let scrollSpeed: CGFloat = 5
+                    
+                        if abs(self.scrollOffset) > scrollSpeed {
+                            if self.scrollOffset > 0 {
+                                self.moveSelection(by: 1, with: proxy)
+                            } else {
+                                self.moveSelection(by: -1, with: proxy)
+                            }
+                            self.scrollOffset = 0
+                        }
+                    
+                        return nil // 阻止默认的事件处理
+                    }
                 }
             }
         }
@@ -289,6 +279,7 @@ struct ClipboardPopupView: View {
         }
     }
 }
+
 
 
 struct BlurView: NSViewRepresentable {

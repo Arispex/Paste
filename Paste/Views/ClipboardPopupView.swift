@@ -115,7 +115,16 @@ struct ClipboardPopupView: View {
     @ObservedObject var clipboardManager = ClipboardManager()
     @State private var selectedItem: UUID?
     @State private var scrollOffset: CGFloat = 0
-    @State private var selectedCategory: ClipboardItemType? = nil
+    @State private var selectedCategory: ClipboardItemType? {
+        didSet {
+                // 当选中一个新类别时，将选中的项设置为该类别的第一个条目
+                if let firstItem = filteredItems.first {
+                    selectedItem = firstItem.id
+                } else {
+                    selectedItem = nil
+                }
+            }
+    }
     
     var filteredItems: [ClipboardItem] {
         if let category = selectedCategory {

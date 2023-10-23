@@ -247,8 +247,12 @@ struct ClipboardPopupView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
-                selectedItem = filteredItems.first?.id
-                proxy.scrollTo(filteredItems.first?.id, anchor: .center)
+                withAnimation(.none) {
+                    selectedItem = filteredItems.first?.id
+                    if let firstID = filteredItems.first?.id {
+                        proxy.scrollTo(firstID, anchor: .center)
+                    }
+                }
             }
             .onAppear {
                 NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in

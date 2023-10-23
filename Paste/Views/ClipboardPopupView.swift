@@ -161,7 +161,7 @@ struct ClipboardPopupView: View {
 
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 20) {
+                    LazyHStack(spacing: 20) {
                         ForEach(filteredItems, id: \.id) { item in
                             ClipboardItemView(item: Binding.constant(item))
                                 .id(item.id)

@@ -249,6 +249,7 @@ struct ClipboardPopupView: View {
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
                 withAnimation(.none) {
                     selectedItem = filteredItems.first?.id
+                    selectedCategory = nil
                     if let firstID = filteredItems.first?.id {
                         proxy.scrollTo(firstID, anchor: .center)
                     }

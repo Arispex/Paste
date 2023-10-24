@@ -47,5 +47,25 @@ struct ClipboardItemView: View {
         .onReceive(item.timeUpdater) { _ in
                     show.toggle() // 这会触发视图的重新渲染
                 }
+        .contextMenu {
+                Button("复制") {
+                    PasteboardHelper.shared.copyToPasteboard(item.content, type: item.type)
+                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                }
+                Button("复制为纯文本") {
+                    PasteboardHelper.shared.copyPainTextToPasteboard(item.content)
+                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                }
+                Button("粘贴") {
+                    PasteboardHelper.shared.copyToPasteboard(item.content, type: item.type)
+                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                }
+                Button("粘贴为纯文本") {
+                    PasteboardHelper.shared.copyPainTextToPasteboard(item.content)
+                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                }
+            }
     }
 }

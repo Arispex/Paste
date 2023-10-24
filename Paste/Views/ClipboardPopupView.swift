@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppKit
+import Combine
 
 struct ClipboardItem: Identifiable, Equatable {
     var id = UUID()
@@ -76,6 +77,14 @@ struct ClipboardItem: Identifiable, Equatable {
             return AnyView(Text(content))
         }
     }
+    
+    var timeUpdater = PassthroughSubject<Void, Never>()
+    
+    func startUpdating() {
+            Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
+                self.timeUpdater.send()
+            }
+        }
 
 
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {

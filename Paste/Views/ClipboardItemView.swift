@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ClipboardItemView: View {
     @Binding var item: ClipboardItem
+    @State var show: Bool = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -39,5 +40,12 @@ struct ClipboardItemView: View {
         .background(Color.white.opacity(0.8))
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+        .onAppear {
+                    item.startUpdating()
+                    show = true
+                }
+        .onReceive(item.timeUpdater) { _ in
+                    show.toggle() // 这会触发视图的重新渲染
+                }
     }
 }

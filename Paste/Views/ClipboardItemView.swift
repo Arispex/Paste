@@ -48,24 +48,55 @@ struct ClipboardItemView: View {
                     show.toggle() // 这会触发视图的重新渲染
                 }
         .contextMenu {
-                Button("复制") {
-                    PasteboardHelper.shared.copyToPasteboard(item.content, type: item.type)
-                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                }
-                Button("复制为纯文本") {
-                    PasteboardHelper.shared.copyPainTextToPasteboard(item.content)
-                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                }
-                Button("粘贴") {
-                    PasteboardHelper.shared.copyToPasteboard(item.content, type: item.type)
-                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
-                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                }
-                Button("粘贴为纯文本") {
-                    PasteboardHelper.shared.copyPainTextToPasteboard(item.content)
-                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
-                    NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
-                }
+            Button(action: {
+                PasteboardHelper.shared.copyToPasteboard(item.content, type: item.type)
+                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+            }, label: {
+                HStack {
+                        Image(systemName: "doc.richtext")
+                        Text("复制")
+                    }
+            })
+            Button {
+                PasteboardHelper.shared.copyPainTextToPasteboard(item.content)
+                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+            } label: {
+                HStack {
+                        Image(systemName: "doc")
+                        Text("复制为纯文本")
+                    }
             }
+
+            Button(action: {
+                PasteboardHelper.shared.copyToPasteboard(item.content, type: item.type)
+                PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+            }) {
+                HStack {
+                        Image(systemName: "doc.on.doc")
+                        Text("粘贴")
+                    }
+            }
+            Button(action: {
+                PasteboardHelper.shared.copyPainTextToPasteboard(item.content)
+                PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+            }) {
+                HStack {
+                        Image(systemName: "doc.on.clipboard")
+                        Text("粘贴为纯文本")
+                    }
+            }
+            Divider()
+            Button {
+                NotificationCenter.default.post(name: NSNotification.Name("DeleteClipboardItem"), object: nil, userInfo: ["id": item.id])
+            } label: {
+                HStack {
+                        Image(systemName: "trash")
+                        Text("删除")
+                    }
+            }
+
+        }
     }
 }

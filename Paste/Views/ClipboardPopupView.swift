@@ -271,6 +271,24 @@ struct ClipboardPopupView: View {
                         }
                     }
                 }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("DeleteClipboardItem"))) { notification in
+                    if let id = notification.userInfo?["id"] as? UUID {
+                        if let indexToDelete = filteredItems.firstIndex(where: { $0.id == id }) {
+                            clipboardManager.deleteItem(with: filteredItems[indexToDelete].id)
+                            if selectedItem == id {
+                                if filteredItems.isEmpty {
+                                    selectedItem = nil
+                                } else if indexToDelete == 0 { // If the first item is deleted
+                                    selectedItem = filteredItems.first?.id
+                                } else {
+                                    let newSelectionIndex = min(indexToDelete, filteredItems.count - 1)
+                                    selectedItem = filteredItems[newSelectionIndex].id
+                                }
+                            }
+                        }
+                    }
+                }
+
                 .onAppear {
                     NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
                         // 当垂直滚轮移动时，改变水平滚动偏移量

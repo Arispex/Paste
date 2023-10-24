@@ -45,6 +45,8 @@ extension String {
     static let autoCleanOldItems = "AutoCleanOldItemsKey"
     // 保留数据数量
     static let maxClipboardItems = "MaxClipboardItemsKey"
+    // 剪贴板中双击
+    static let doubleClickInClipboard = "DoubleClickInClipboardKey"
 }
 
 
@@ -53,6 +55,7 @@ struct GeneralSettingsView: View {
     @AppStorage("SoundReminderWhenCopyingKey") var soundReminderWhenCopying: Bool = false
     @AppStorage("SoundKey") var sound: String = "Tink"
     @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
+    @AppStorage("DoubleClickInClipboardKey") var doubleClickInClipboard: String = "copy"
     @AppStorage("AutoCleanOldItemsKey") var autoCleanOldItems: Bool = false
     @AppStorage("MaxClipboardItemsKey") var maxClipboardItems: Int = 100
     
@@ -83,9 +86,32 @@ struct GeneralSettingsView: View {
                     .font(.headline)
                     .padding(.bottom, 10)
                 
+                HStack {
+                    Text("回车")
+                        .frame(alignment: .leading)
+                    Spacer()
+                    Picker("", selection: $enterInClipboard) {
+                        Text("复制").tag("copy")
+                        Text("粘贴").tag("paste")
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: 150)  // 调整宽度以适应你的需求
+                }
+                
+                HStack {
+                    Text("双击")
+                        .frame(alignment: .leading)
+                    Spacer()
+                    Picker("", selection: $doubleClickInClipboard) {
+                        Text("复制").tag("copy")
+                        Text("粘贴").tag("paste")
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: 150)  // 调整宽度以适应你的需求
+                }
+                
                 Toggle("复制时声音提醒", isOn: $soundReminderWhenCopying)
                     .toggleStyle(SwitchToggleStyle())
-                    .padding(.bottom, 20)
                 
                 HStack {
                     Text("提示音")
@@ -95,27 +121,6 @@ struct GeneralSettingsView: View {
                         ForEach(sounds, id: \.self) { sound in
                             Text(sound).tag(sound)
                         }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                    .frame(width: 150)  // 调整宽度以适应你的需求
-                }
-                
-                Divider()
-                    .padding(.bottom, 20)
-                
-                // Section: 剪贴板
-                Text("剪贴板")
-                    .foregroundColor(.gray)
-                    .font(.headline)
-                    .padding(.bottom, 10)
-                
-                HStack {
-                    Text("回车")
-                        .frame(alignment: .leading)
-                    Spacer()
-                    Picker("", selection: $enterInClipboard) {
-                        Text("复制").tag("copy")
-                        Text("粘贴").tag("paste")
                     }
                     .pickerStyle(MenuPickerStyle())
                     .frame(width: 150)  // 调整宽度以适应你的需求

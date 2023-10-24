@@ -137,6 +137,7 @@ struct ClipboardPopupView: View {
     
     @State private var lastTapTime = Date()
     @AppStorage("EnterInClipboardKey") var enterInClipboard: String = "copy"
+    @AppStorage("DoubleClickInClipboardKey") var doubleClickInClipboard: String = "copy"
     
     var filteredItems: [ClipboardItem] {
         if let category = selectedCategory {
@@ -184,7 +185,7 @@ struct ClipboardPopupView: View {
                                     if timeSinceLastTap < 0.3 { // 300 毫秒以内的点击认为是双击
                                         if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
                                             PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
-                                            if enterInClipboard == "paste" {
+                                            if doubleClickInClipboard == "paste" {
                                                 PasteboardHelper.shared.pasteToCurrentFocusedElement()
                                             }
                                             NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)

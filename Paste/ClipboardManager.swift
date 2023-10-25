@@ -151,13 +151,17 @@ class ClipboardManager: NSObject, ObservableObject, NSApplicationDelegate {
             
             // Check if the content is the same as the most recently copied item
             if let lastItem = try? db.pluck(table.order(timestamp.desc).limit(1)),
-               let lastContent = lastItem[content], lastContent == newEntityContent {
-                print("Content is the same as the most recently copied item, returning")
+               let lastContent = lastItem[content],
+               let lastType = lastItem[type], // 获取最后一个项目的type
+               lastContent == newEntityContent,
+               lastType == newEntityType // 检查类型是否相等
+            {
+                print("Content and type are the same as the most recently copied item, returning")
                 return
             }
             
             // Check if item with the same content already exists
-            let existingItemQuery = table.filter(content == newEntityContent!)
+            let existingItemQuery = table.filter(content == newEntityContent! && type == newEntityType)
             if let existingItem = try? db.pluck(existingItemQuery) {
                 // Update timestamp of the existing item
                 let updateTimestamp = existingItemQuery.update(timestamp <- newEntityTimestamp)

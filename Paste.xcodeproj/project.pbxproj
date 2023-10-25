@@ -29,6 +29,7 @@
 		9C731A852ADBD8E900F09FB0 /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A842ADBD8E900F09FB0 /* ClipboardManager.swift */; };
 		9C731A932ADF6A6400F09FB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A922ADF6A6300F09FB0 /* AppDelegate.swift */; };
 		9C731A952ADF6D7700F09FB0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C731A942ADF6D7700F09FB0 /* MainViewController.swift */; };
+		9C731AAE2AE8EA0000F09FB0 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 9C731AAD2AE8EA0000F09FB0 /* LaunchAtLogin */; };
 		9C9363FD2AD43C0400F78F88 /* ClipboardItemFileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363F82AD43C0300F78F88 /* ClipboardItemFileInfoView.swift */; };
 		9C9363FE2AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363F92AD43C0400F78F88 /* ClipboardItemMissingFileInfoView.swift */; };
 		9C9363FF2AD43C0400F78F88 /* ClipboardItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9363FA2AD43C0400F78F88 /* ClipboardItemImageView.swift */; };
@@ -90,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C731AAE2AE8EA0000F09FB0 /* LaunchAtLogin in Frameworks */,
 				9C1A237C2AD7C77600EDFEED /* SQLite in Frameworks */,
 				9C54FFB82AD185BB00D5893E /* KeyboardShortcuts in Frameworks */,
 			);
@@ -246,6 +248,7 @@
 			packageProductDependencies = (
 				9C54FFB72AD185BB00D5893E /* KeyboardShortcuts */,
 				9C1A237B2AD7C77600EDFEED /* SQLite */,
+				9C731AAD2AE8EA0000F09FB0 /* LaunchAtLogin */,
 			);
 			productName = Paste;
 			productReference = 9C54FF7E2AD17D6D00D5893E /* Paste.app */;
@@ -322,6 +325,7 @@
 			packageReferences = (
 				9C54FFB62AD185BB00D5893E /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				9C1A237A2AD7C77600EDFEED /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				9C731AAC2AE8EA0000F09FB0 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 			);
 			productRefGroup = 9C54FF7F2AD17D6D00D5893E /* Products */;
 			projectDirPath = "";
@@ -727,6 +731,14 @@
 				minimumVersion = 1.15.0;
 			};
 		};
+		9C731AAC2AE8EA0000F09FB0 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -739,6 +751,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9C54FFB62AD185BB00D5893E /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		9C731AAD2AE8EA0000F09FB0 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C731AAC2AE8EA0000F09FB0 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
 

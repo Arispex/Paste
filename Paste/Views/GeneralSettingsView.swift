@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import LaunchAtLogin
 
 struct SwitchToggleStyle: ToggleStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
@@ -47,6 +48,8 @@ extension String {
     static let maxClipboardItems = "MaxClipboardItemsKey"
     // 剪贴板中双击
     static let doubleClickInClipboard = "DoubleClickInClipboardKey"
+    // 登入时启动
+    static let launchAtLogin = "LaunchAtLoginKey"
 }
 
 
@@ -58,6 +61,7 @@ struct GeneralSettingsView: View {
     @AppStorage("DoubleClickInClipboardKey") var doubleClickInClipboard: String = "copy"
     @AppStorage("AutoCleanOldItemsKey") var autoCleanOldItems: Bool = false
     @AppStorage("MaxClipboardItemsKey") var maxClipboardItems: Int = 100
+    @AppStorage("LaunchAtLoginKey") var launchAtLogin: Bool = false
     
     let sounds = ["Tink", "Frog", "Bottle", "Purr"]
     
@@ -76,6 +80,17 @@ struct GeneralSettingsView: View {
                     }
                     .toggleStyle(SwitchToggleStyle())
                 }
+                
+                Toggle("登入时启动", isOn: $launchAtLogin)
+                    .toggleStyle(SwitchToggleStyle())
+                    .onChange(of: launchAtLogin) { oldValue, newValue in
+                        if launchAtLogin {
+                            LaunchAtLogin.isEnabled = true
+                        }
+                        else {
+                            LaunchAtLogin.isEnabled = false
+                        }
+                    }
                 
                 Divider()
                     .padding(.bottom, 20)

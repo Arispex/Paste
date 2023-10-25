@@ -30,8 +30,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if event.type == .leftMouseUp {
             // 左键点击逻辑
             let menu = NSMenu()
-            menu.addItem(NSMenuItem(title: "打开设置", action: #selector(openMainWindow), keyEquivalent: ""))
-            menu.addItem(NSMenuItem(title: "退出", action: #selector(quitApp), keyEquivalent: ""))
+            let settingsMenuItem = NSMenuItem(title: "打开设置", action: #selector(openMainWindow), keyEquivalent: "")
+            if let settingsImage = NSImage(systemSymbolName: "gear", accessibilityDescription: nil) {
+                settingsImage.size = NSSize(width: 16, height: 16)
+                settingsMenuItem.image = settingsImage
+            }
+            menu.addItem(settingsMenuItem)
+            
+            let exitMenuItem = NSMenuItem(title: "退出", action: #selector(quitApp), keyEquivalent: "")
+            if let exitImage = NSImage(systemSymbolName: "power", accessibilityDescription: nil) {
+                exitImage.size = NSSize(width: 16, height: 16)
+                exitMenuItem.image = exitImage
+            }
+            menu.addItem(exitMenuItem)
             
             statusBarItem?.menu = menu
             statusBarItem?.popUpMenu(menu)

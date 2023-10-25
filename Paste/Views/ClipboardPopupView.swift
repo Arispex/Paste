@@ -256,6 +256,20 @@ struct ClipboardPopupView: View {
                                 }
                             }
                             return nil
+                        case 8:
+                            if event.modifierFlags.contains(.command) {
+                                if (event.modifierFlags.contains(.shift)) {
+                                    if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                        PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
+                                    }
+                                }
+                                else {
+                                    if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                        PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
+                                    }
+                                }
+                            }
+                            return nil
                         default:
                             break
                         }

@@ -29,38 +29,46 @@ struct ShortcutSettingsView: View {
                 .font(.headline)
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Text("在剪贴板中切换")
+                    Text("切换")
                     Spacer()
                     Image(systemName: "arrow.left").foregroundColor(.blue)
                     Image(systemName: "arrow.right").foregroundColor(.blue)
                     Image(systemName: "arrow.up").foregroundColor(.blue)
                     Image(systemName: "arrow.down").foregroundColor(.blue)
+                    Image(systemName: "computermouse").foregroundColor(.blue)
                         .padding(.leading, 5) // 添加一些间距使图标不会紧挨在一起
                 }
                 HStack {
-                    Text("关闭剪贴板")
+                    Text("关闭")
                     Spacer()
                     Text("ESC").foregroundColor(.blue)
                 }
                 HStack {
-                    Text("复制到剪贴板")
+                    Text("复制")
                     Spacer()
                     Image(systemName: "command").foregroundColor(.blue)
                     Text("C").foregroundColor(.blue)
                 }
                 HStack {
-                    Text("在剪贴板中复制或粘贴剪贴内容")
+                    Text("复制为纯文本")
+                    Spacer()
+                    Image(systemName: "command").foregroundColor(.blue)
+                    Image(systemName: "shift").foregroundColor(.blue)
+                    Text("C").foregroundColor(.blue)
+                }
+                HStack {
+                    Text("复制或粘贴")
                     Spacer()
                     Image(systemName: "return").foregroundColor(.blue)
                 }
                 HStack {
-                    Text("在剪贴板中复制或粘贴纯文本剪贴内容")
+                    Text("复制或粘贴纯文本")
                     Spacer()
                     Image(systemName: "shift").foregroundColor(.blue)
                     Image(systemName: "return").foregroundColor(.blue)
                 }
                 HStack {
-                    Text("在剪贴板中删除剪贴内容")
+                    Text("删除")
                     Spacer()
                     Image(systemName: "delete.left").foregroundColor(.blue)
                 }

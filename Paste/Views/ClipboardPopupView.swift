@@ -237,6 +237,26 @@ struct ClipboardPopupView: View {
                     .frame(minHeight: 300)
                 }
                 .background(BlurView())
+                .onChange(of: searchText, { newValue, previousValue in
+                        if let firstItem = filteredItems.first {
+                            selectedItem = firstItem.id
+                            withAnimation(.none) {
+                                proxy.scrollTo(firstItem.id, anchor: .center)
+                            }
+                        } else {
+                            selectedItem = nil
+                        }
+                })
+                .onChange(of: selectedCategory, { newValue, previousValue in
+                    if let firstItem = filteredItems.first {
+                        selectedItem = firstItem.id
+                        withAnimation(.none) {
+                            proxy.scrollTo(firstItem.id, anchor: .center)
+                        }
+                    } else {
+                        selectedItem = nil
+                    }
+                })
                 .onChange(of: isSearchBarEditable, perform: { newValue in
                     if newValue {
                                 // 删除监听

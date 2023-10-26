@@ -180,7 +180,7 @@ struct ClipboardPopupView: View {
                         Image(systemName: "magnifyingglass")  // SF Symbols 放大镜图标
                             .foregroundColor(.gray)
                             .padding(.leading, 16)
-                        TextField("Search...", text: $searchText, onCommit: {
+                        TextField("搜索...", text: $searchText, onCommit: {
                             self.isSearchBarEditable = false
                         })
                             .disabled(!isSearchBarEditable)
@@ -381,6 +381,8 @@ struct ClipboardPopupView: View {
                 }
                 .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetClipboardSelection"))) { _ in
                     withAnimation(.none) {
+                        searchText = ""
+                        isSearchBarEditable = false
                         selectedItem = filteredItems.first?.id
                         selectedCategory = nil
                         if let firstID = filteredItems.first?.id {

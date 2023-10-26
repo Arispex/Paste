@@ -124,6 +124,9 @@ struct ClipboardPopupView: View {
     @ObservedObject var clipboardManager = ClipboardManager()
     @State private var selectedItem: UUID?
     @State private var scrollOffset: CGFloat = 0
+    @State private var searchText: String = ""
+    @State private var isSearchBarEditable: Bool = false
+    @State private var keyEventListener: Any?
     @State private var selectedCategory: ClipboardItemType? {
         didSet {
             // 当选中一个新类别时，将选中的项设置为该类别的第一个条目
@@ -140,10 +143,17 @@ struct ClipboardPopupView: View {
     @AppStorage("DoubleClickInClipboardKey") var doubleClickInClipboard: String = "copy"
     
     var filteredItems: [ClipboardItem] {
+        var items = clipboardManager.items
+        
         if let category = selectedCategory {
-            return clipboardManager.items.filter { $0.type == category }
+            items = items.filter { $0.type == category }
         }
-        return clipboardManager.items
+        
+        if !searchText.isEmpty {
+            items = items.filter { $0.content.lowercased().contains(searchText.lowercased()) }
+        }
+        
+        return items
     }
 
     var body: some View {
@@ -151,7 +161,7 @@ struct ClipboardPopupView: View {
             // 类别选择器
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 20) {
-                    Spacer()  // 添加 Spacer 使内容居中
+                    Spacer()
                     ForEach(ClipboardItemType.allCases, id: \.self) { category in
                         Text(category.rawValue)
                             .font(.system(size: 16, weight: .semibold))
@@ -166,7 +176,25 @@ struct ClipboardPopupView: View {
                                 }
                             }
                     }
-                    Spacer()  // 添加 Spacer 使内容居中
+                    HStack {
+                        Image(systemName: "magnifyingglass")  // SF Symbols 放大镜图标
+                            .foregroundColor(.gray)
+                            .padding(.leading, 16)
+                        TextField("Search...", text: $searchText, onCommit: {
+                            self.isSearchBarEditable = false
+                        })
+                            .disabled(!isSearchBarEditable)
+                            .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 16))  // 调整左内边距
+                    }
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(16)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(Color.black)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .onTapGesture {
+                                isSearchBarEditable.toggle()
+                            }
+
                 }
                 .frame(minHeight: 80, alignment: .center)
             }
@@ -209,9 +237,84 @@ struct ClipboardPopupView: View {
                     .frame(minHeight: 300)
                 }
                 .background(BlurView())
-                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-                    NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-                        
+                .onChange(of: isSearchBarEditable, perform: { newValue in
+                    if newValue {
+                                // 删除监听
+                                if let listener = keyEventListener {
+                                    NSEvent.removeMonitor(listener)
+                                    keyEventListener = nil
+                                }
+                            } else {
+                                // 添加监听
+                                keyEventListener = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                                    switch event.keyCode {
+                                    case 123, 126: // Left and up arrow
+                                        self.moveSelection(by: -1, with: proxy)
+                                        return nil // 不再返回事件
+                                    case 124, 125: // Right and down arrow
+                                        self.moveSelection(by: 1, with: proxy)
+                                        return nil // 不再返回事件
+                                    case 36: // Return key
+                                        if event.modifierFlags.contains(.shift) {
+                                            if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                                PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
+                                                if enterInClipboard == "paste" {
+                                                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                                                }
+                                                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                                            }
+                                            return nil
+                                        } else {
+                                            if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                                PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
+                                                if enterInClipboard == "paste" {
+                                                    PasteboardHelper.shared.pasteToCurrentFocusedElement()
+                                                }
+                                                NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                                            }
+                                            return nil
+                                        }
+                                    case 53:
+                                        NotificationCenter.default.post(name: NSNotification.Name("HideClipboardPopup"), object: nil)
+                                        return nil
+                                    case 51: // Delete key
+                                        if let indexToDelete = filteredItems.firstIndex(where: { $0.id == selectedItem }) {
+                                            clipboardManager.deleteItem(with: filteredItems[indexToDelete].id)
+                                                    
+                                            if filteredItems.isEmpty {
+                                                selectedItem = nil
+                                            } else if indexToDelete == 0 { // If the first item is deleted
+                                                selectedItem = filteredItems.first?.id
+                                            } else {
+                                                let newSelectionIndex = min(indexToDelete, filteredItems.count - 1)
+                                                selectedItem = filteredItems[newSelectionIndex].id
+                                            }
+                                        }
+                                        return nil
+                                    case 8:
+                                        if event.modifierFlags.contains(.command) {
+                                            if (event.modifierFlags.contains(.shift)) {
+                                                if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                                    PasteboardHelper.shared.copyPainTextToPasteboard(itemToCopy.content)
+                                                }
+                                            }
+                                            else {
+                                                if let itemToCopy = filteredItems.first(where: { $0.id == selectedItem }) {
+                                                    PasteboardHelper.shared.copyToPasteboard(itemToCopy.content, type: itemToCopy.type)
+                                                }
+                                            }
+                                        }
+                                        return nil
+                                    default:
+                                        break
+                                    }
+                                    return event
+                                }
+                            }
+                })
+                .onAppear() {
+                    // 添加监听
+                    keyEventListener = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                         switch event.keyCode {
                         case 123, 126: // Left and up arrow
                             self.moveSelection(by: -1, with: proxy)
